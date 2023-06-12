@@ -13,9 +13,9 @@ namespace BackPuppy.Validaciones
             return Errores(request, StatusCodes.Status403Forbidden, title, "validation-error");
         }
 
-        public static ObjectResult BadRequest(HttpRequest request, string title = "Los parametros introducidos son incorrectos", List<ErrorValidacion>? details = null)
+        public static ObjectResult BadRequest(HttpRequest request, string title = "Los parametros introducidos son incorrectos")
         {
-            return Errores(request, StatusCodes.Status400BadRequest, title, "validation-error", details);
+            return Errores(request, StatusCodes.Status400BadRequest, title, "validation-error");
         }
         public static ObjectResult NotFound(HttpRequest request, string title = "El recurso solicitado no existe")
         {
@@ -24,7 +24,7 @@ namespace BackPuppy.Validaciones
         }
         public static ObjectResult NotFound(HttpRequest request, string title = "El recurso solicitado no existe", string detail = "El elemento que ha solicitado no se encuentra disponible en el sistema.")
         {
-            return Errores(request, StatusCodes.Status404NotFound, title, "validation-error", "", detail);
+            return Errores(request, StatusCodes.Status404NotFound, title, "validation-error");
         }
 
         protected static ObjectResult Errores(HttpRequest request, int statusCode, string title, string type)

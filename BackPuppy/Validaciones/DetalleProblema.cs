@@ -28,8 +28,8 @@ namespace BackPuppy.Validaciones
         //
         // Resumen:
         //     A human-readable explanation specific to this occurrence of the problem.
-        [JsonPropertyName("details")]
-        public List<ErrorValidacion>? Detail { get; set; }
+        //[JsonPropertyName("details")]
+        //public List<ErrorValidacion>? Detail { get; set; }
         //
         // Resumen:
         //     A URI reference that identifies the specific occurrence of the problem.It may
