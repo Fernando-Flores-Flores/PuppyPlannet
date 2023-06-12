@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BackPuppy.Dtos;
 using BackPuppy.Entity;
+using BackPuppy.Validaciones;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,20 +26,36 @@ namespace BackPuppy.Controllers
 
      
         [HttpPost("CrearPersona")]
-        public async Task<ActionResult<PersonaDto>> CrearPersona([FromBody] PersonaDto persona)
+        public async Task<ActionResult<ResponseDto<PersonaDto>>> CrearPersona([FromBody] PersonaDto persona)
         {
             try
             {
+                DateTime localDateTime = DateTime.Now;
+                DateTime utcDateTime = localDateTime.ToUniversalTime();
                 var personaBase = mapper.Map<persona>(persona);
+                personaBase.api_estado = "ELABORADO";
+                personaBase.api_transaccion = "ELABORAR";
+                personaBase.fecha_cre = utcDateTime;
+                personaBase.fecha_mod = utcDateTime;
+                personaBase.usuario_mod = "LocalDBA";
 
                 context.Add(personaBase);
-              await context.SaveChangesAsync();
-                return Ok(personaBase);
+                await context.SaveChangesAsync();
+                var response = new ResponseDto<persona>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1001,
+                    MensajeRespuesta = "CORRECTO",
+                    datos = personaBase
+                };
+
+                return Ok(response);
             }
             catch (Exception e)
             {
-                return NotFound(e.Message);
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
             }
         }
     }
-}
+} 

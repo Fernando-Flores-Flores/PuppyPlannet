@@ -26,7 +26,7 @@ namespace BackPuppy.Entity
         public string? api_transaccion { get; set; }
         public DateTime? fecha_cre { get; set; }
         public DateTime? fecha_mod { get; set; }
-        public DateTime? usuario_mod { get; set; }
+        public String? usuario_mod { get; set; }
 
 
     }
