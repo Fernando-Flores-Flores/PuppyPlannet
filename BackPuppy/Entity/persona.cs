@@ -28,6 +28,9 @@ namespace BackPuppy.Entity
         public DateTime? fecha_mod { get; set; }
         public String? usuario_mod { get; set; }
 
+        [Required]
+        public String idCuentaIdentity { get; set; }
+
 
     }
 

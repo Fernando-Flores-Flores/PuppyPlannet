@@ -1,13 +1,22 @@
-﻿namespace BackPuppy.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BackPuppy.Dtos
 {
     public class PersonaDto
     {
-        public string carnet { get; set; }
-        public string nombres { get; set; }
-        public string apellidoPaterno { get; set; }
-        public string apellidoMaterno { get; set; }
+        [Required]
+        public String carnet { get; set; }
+        [Required]
+        public String nombres { get; set; }
+        public String? apellidoPaterno { get; set; }
+        public String? apellidoMaterno { get; set; }
+
+        [Required]
         public int celular { get; set; }
-        public string correo { get; set; }
-        public string direccion { get; set; }
+        [Required]
+        public String correo { get; set; }
+        public String? direccion { get; set; }
+        [Required]
+        public String idCuentaIdentity { get; set; }
     }
 }

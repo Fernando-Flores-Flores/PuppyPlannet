@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackPuppy.Entity
 {
-    public class AplicationDbContext:DbContext
+    public class AplicationDbContext:IdentityDbContext
     {
         public AplicationDbContext(DbContextOptions options) : base(options)
         {
@@ -12,5 +13,10 @@ namespace BackPuppy.Entity
         {
         }
         public  DbSet<persona> Personas { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
     }
 }
