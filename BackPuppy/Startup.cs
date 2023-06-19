@@ -36,8 +36,7 @@ namespace BackPuppy
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["llaveJWT"])),
                 ClockSkew = TimeSpan.Zero
             });
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-          .AddErrorDescriber<SpanishIdentityErrorDescriber>();
+           // services.AddIdentity<ApplicationUser, IdentityRole>().AddErrorDescriber<SpanishIdentityErrorDescriber>();
             services.AddSwaggerGen();
             services.AddAutoMapper(typeof(Startup));    
         }
