@@ -7,11 +7,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackPuppy.Migrations
 {
     /// <inheritdoc />
-    public partial class identity : Migration
+    public partial class Priemera : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "public");
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -49,6 +52,32 @@ namespace BackPuppy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "personas",
+                schema: "public",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    carnet = table.Column<string>(type: "text", nullable: false),
+                    nombres = table.Column<string>(type: "text", nullable: false),
+                    apellido_paterno = table.Column<string>(type: "text", nullable: true),
+                    apellido_materno = table.Column<string>(type: "text", nullable: true),
+                    celular = table.Column<int>(type: "integer", nullable: true),
+                    correo = table.Column<string>(type: "text", nullable: true),
+                    direccion = table.Column<string>(type: "text", nullable: true),
+                    api_estado = table.Column<string>(type: "text", nullable: true),
+                    api_transaccion = table.Column<string>(type: "text", nullable: true),
+                    fecha_cre = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    fecha_mod = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    usuario_mod = table.Column<string>(type: "text", nullable: true),
+                    idCuentaIdentity = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_personas", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -212,6 +241,10 @@ namespace BackPuppy.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "personas",
+                schema: "public");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

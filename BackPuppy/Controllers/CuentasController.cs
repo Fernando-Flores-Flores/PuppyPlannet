@@ -34,7 +34,7 @@ namespace BackPuppy.Controllers
 
  
         [HttpPost("CrearCuentaUsuario")]
-        public async Task<ActionResult<ResponseDto<RespuestaAutenticacion>>> CrearCuentaUsuario([FromBody] PersonaDto persona, string password)
+        public async Task<ActionResult<ResponseDto<RespuestaAutenticacion>>> CrearCuentaUsuario([FromBody] PersonaDto persona, string password,string rol)
         {
             try
             {
@@ -61,6 +61,30 @@ namespace BackPuppy.Controllers
                         HttpResponseMessage response = await httpClient.PostAsync("https://localhost:7101/api/Personas/CrearPersona", contentPersona);
                         string responsePersona = await response.Content.ReadAsStringAsync();
                         var responseDtoPersona = JsonSerializer.Deserialize<ResponseDto<PersonaDto>>(responsePersona);
+
+
+                        //AsignarRol
+                        var usuarioId = persona.idCuentaIdentity;
+                        var rolEnviar = rol;
+                        // Crear el objeto que contiene los datos a enviar en el cuerpo
+                        var data = new { usuarioId, rol };
+                        // Serializar los datos como JSON
+                        var json = System.Text.Json.JsonSerializer.Serialize(data);
+
+                        // Crear el contenido de la solicitud HTTP
+                        var contenido = new StringContent(json, Encoding.UTF8, "application/json");
+
+                        // Construir la URL con el parámetro usuarioId
+                        //   var url = $"https://localhost:7101/api/Cuentas/asignarRol?usuarioId={usuarioId}&rol={rolEnviar}";
+                        var url = $"https://localhost:7101/api/Cuentas/asignarRol?usuarioId={usuarioId}&rol={rolEnviar}";
+
+                        // Enviar la solicitud HTTP POST con la URL y el contenido en el cuerpo
+                        HttpResponseMessage respuestaCrearRol = await httpClient.PostAsync(url, contenido);
+
+                        var responseContent = await respuestaCrearRol.Content.ReadAsStringAsync();
+
+                        Console.WriteLine(responseContent);
+
                         return Ok(responseDtoPersona);
                     }
                     else
@@ -175,6 +199,44 @@ namespace BackPuppy.Controllers
                 return NotFound(e.Message);
             }
         }
+
+        [HttpPost("asignarRol")]
+        public async Task<ActionResult> asignarRol(string usuarioId, string rol)
+        {
+            var usuario = await userManager.FindByIdAsync(usuarioId);
+            var claims = await userManager.GetClaimsAsync(usuario);
+            if (claims.Count == 0)
+            {
+                await userManager.AddClaimAsync(usuario, new Claim("role", rol));
+            }
+            else
+            {
+                var nameClaim = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+                List<Claim> claimsToRemove = new List<Claim>();
+                foreach (var claim in claims)
+                {
+                    if (claim.Type == "role")
+                    {
+                        claimsToRemove.Add(claim);
+                    }
+                }
+                await userManager.RemoveClaimsAsync(usuario, claimsToRemove);
+                await userManager.UpdateAsync(usuario);
+                await userManager.AddClaimAsync(usuario, new Claim("role", rol));
+                claims = await userManager.GetClaimsAsync(usuario);
+            }
+
+            var response = new ResponseDto<long>()
+            {
+                statusCode = StatusCodes.Status200OK,
+                fechaConsulta = DateTime.Now,
+                codigoRespuesta = 1001,
+                MensajeRespuesta = "CORRECTO",
+                claims = claims
+            };
+            return Ok(response);
+        }
+
 
     }
 }
