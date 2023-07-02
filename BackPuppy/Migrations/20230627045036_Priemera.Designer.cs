@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackPuppy.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    [Migration("20230612205504_segunda")]
-    partial class segunda
+    [Migration("20230627045036_Priemera")]
+    partial class Priemera
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,10 @@ namespace BackPuppy.Migrations
 
                     b.Property<DateTime?>("fecha_mod")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("idCuentaIdentity")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("nombres")
                         .IsRequired()
