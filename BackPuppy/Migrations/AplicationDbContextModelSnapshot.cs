@@ -65,6 +65,9 @@ namespace BackPuppy.Migrations
                     b.Property<DateTime?>("fecha_mod")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("fotografia")
+                        .HasColumnType("text");
+
                     b.Property<string>("idCuentaIdentity")
                         .IsRequired()
                         .HasColumnType("text");

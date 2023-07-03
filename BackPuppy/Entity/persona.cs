@@ -21,6 +21,7 @@ namespace BackPuppy.Entity
         public int? celular { get; set; }
         public string? correo { get; set; }
         public string? direccion { get; set; }
+        public String? fotografia { get; set; }
 
         public string? api_estado { get; set; }
         public string? api_transaccion { get; set; }
@@ -30,6 +31,8 @@ namespace BackPuppy.Entity
 
         [Required]
         public String idCuentaIdentity { get; set; }
+        
+        
 
 
     }

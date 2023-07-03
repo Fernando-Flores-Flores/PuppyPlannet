@@ -4,6 +4,7 @@ using BackPuppy.Validaciones;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
@@ -31,10 +32,8 @@ namespace BackPuppy.Controllers
             this.signInManager = signInManager;
             this.httpClient = httpClient;
         }
-
- 
         [HttpPost("CrearCuentaUsuario")]
-        public async Task<ActionResult<ResponseDto<RespuestaAutenticacion>>> CrearCuentaUsuario([FromBody] PersonaDto persona, string password,string rol)
+        public async Task<ActionResult<ResponseDto<RespuestaAutenticacion>>> CrearCuentaUsuario([FromForm] PersonaDto persona, string password, string rol)
         {
             try
             {
@@ -53,16 +52,8 @@ namespace BackPuppy.Controllers
                     var responseDto = JsonSerializer.Deserialize<ResponseDto<String>>(responseBody);
 
                     if (responseDto.statusCode == 200)
-                    {   
+                    {
                         persona.idCuentaIdentity = responseDto.datos;
-                        string jsonData = JsonSerializer.Serialize(persona);
-                        var contentPersona = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-                        HttpResponseMessage response = await httpClient.PostAsync("https://localhost:7101/api/Personas/CrearPersona", contentPersona);
-                        string responsePersona = await response.Content.ReadAsStringAsync();
-                        var responseDtoPersona = JsonSerializer.Deserialize<ResponseDto<PersonaDto>>(responsePersona);
-
-
                         //AsignarRol
                         var usuarioId = persona.idCuentaIdentity;
                         var rolEnviar = rol;
@@ -75,15 +66,41 @@ namespace BackPuppy.Controllers
                         var contenido = new StringContent(json, Encoding.UTF8, "application/json");
 
                         // Construir la URL con el parámetro usuarioId
-                        //   var url = $"https://localhost:7101/api/Cuentas/asignarRol?usuarioId={usuarioId}&rol={rolEnviar}";
                         var url = $"https://localhost:7101/api/Cuentas/asignarRol?usuarioId={usuarioId}&rol={rolEnviar}";
-
                         // Enviar la solicitud HTTP POST con la URL y el contenido en el cuerpo
                         HttpResponseMessage respuestaCrearRol = await httpClient.PostAsync(url, contenido);
 
                         var responseContent = await respuestaCrearRol.Content.ReadAsStringAsync();
 
                         Console.WriteLine(responseContent);
+
+                      
+
+                        var contentPersona = new MultipartFormDataContent();
+                        contentPersona.Add(new StringContent(persona.idCuentaIdentity), "idCuentaIdentity");
+                        contentPersona.Add(new StringContent(persona.carnet), "carnet");
+                        contentPersona.Add(new StringContent(persona.nombres), "nombres");
+                        contentPersona.Add(new StringContent(persona.apellidoPaterno), "apellidoPaterno");
+                        contentPersona.Add(new StringContent(persona.apellidoMaterno), "apellidoMaterno");
+                        contentPersona.Add(new StringContent(persona.celular.ToString()), "celular");
+                        contentPersona.Add(new StringContent(persona.correo), "correo");
+                        contentPersona.Add(new StringContent(persona.direccion), "direccion");
+                  
+                        var fotografiaStream = persona.fotografia.OpenReadStream();
+                        var fotografiaContent = new StreamContent(fotografiaStream);
+                        fotografiaContent.Headers.ContentType = new MediaTypeHeaderValue(persona.fotografia.ContentType);
+                        fotografiaContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                        {
+                            Name = "fotografia",
+                            FileName = persona.fotografia.FileName
+                        };
+                        contentPersona.Add(fotografiaContent);
+
+                        HttpResponseMessage response = await httpClient.PostAsync("https://localhost:7101/api/Personas/CrearPersona", contentPersona);
+                        string responsePersona = await response.Content.ReadAsStringAsync();
+
+                        var responseDtoPersona = JsonSerializer.Deserialize<ResponseDto<persona>>(responsePersona);
+
 
                         return Ok(responseDtoPersona);
                     }
@@ -105,6 +122,80 @@ namespace BackPuppy.Controllers
                 return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
             }
         }
+
+
+        //[HttpPost("CrearCuentaUsuario")]
+        //public async Task<ActionResult<ResponseDto<RespuestaAutenticacion>>> CrearCuentaUsuario([FromBody] PersonaDto persona, string password,string rol)
+        //{
+        //    try
+        //    {
+        //        var credenciales = new CredencialesDto()
+        //        {
+        //            email = persona.correo,
+        //            password = password
+        //        };
+        //        var jsonCredenciales = JsonSerializer.Serialize(credenciales);
+        //        var content = new StringContent(jsonCredenciales, Encoding.UTF8, "application/json");
+        //        HttpResponseMessage respuesta = await httpClient.PostAsync("https://localhost:7101/api/Cuentas/CrearCuentaIdentity", content);
+
+        //        if (respuesta.IsSuccessStatusCode)
+        //        {
+        //            string responseBody = await respuesta.Content.ReadAsStringAsync();
+        //            var responseDto = JsonSerializer.Deserialize<ResponseDto<String>>(responseBody);
+
+        //            if (responseDto.statusCode == 200)
+        //            {   
+        //                persona.idCuentaIdentity = responseDto.datos;
+        //                string jsonData = JsonSerializer.Serialize(persona);
+        //                var contentPersona = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+        //                HttpResponseMessage response = await httpClient.PostAsync("https://localhost:7101/api/Personas/CrearPersona", contentPersona);
+        //                string responsePersona = await response.Content.ReadAsStringAsync();
+        //                var responseDtoPersona = JsonSerializer.Deserialize<ResponseDto<PersonaDto>>(responsePersona);
+
+
+        //                //AsignarRol
+        //                var usuarioId = persona.idCuentaIdentity;
+        //                var rolEnviar = rol;
+        //                // Crear el objeto que contiene los datos a enviar en el cuerpo
+        //                var data = new { usuarioId, rol };
+        //                // Serializar los datos como JSON
+        //                var json = System.Text.Json.JsonSerializer.Serialize(data);
+
+        //                // Crear el contenido de la solicitud HTTP
+        //                var contenido = new StringContent(json, Encoding.UTF8, "application/json");
+
+        //                // Construir la URL con el parámetro usuarioId
+        //                //   var url = $"https://localhost:7101/api/Cuentas/asignarRol?usuarioId={usuarioId}&rol={rolEnviar}";
+        //                var url = $"https://localhost:7101/api/Cuentas/asignarRol?usuarioId={usuarioId}&rol={rolEnviar}";
+
+        //                // Enviar la solicitud HTTP POST con la URL y el contenido en el cuerpo
+        //                HttpResponseMessage respuestaCrearRol = await httpClient.PostAsync(url, contenido);
+
+        //                var responseContent = await respuestaCrearRol.Content.ReadAsStringAsync();
+
+        //                Console.WriteLine(responseContent);
+
+        //                return Ok(responseDtoPersona);
+        //            }
+        //            else
+        //            {
+        //                return BadRequest(responseDto);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            string responseBody = await respuesta.Content.ReadAsStringAsync();
+        //            var responseDto = JsonSerializer.Deserialize<ResponseDto<String>>(responseBody);
+
+        //            return BadRequest(responseDto);
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
+        //    }
+        //}
 
 
         [HttpPost("CrearCuentaIdentity")]
@@ -171,34 +262,83 @@ namespace BackPuppy.Controllers
 
         }
 
+        //private async Task<ActionResult<RespuestaAutenticacion>> ConstruirToken(CredencialesDto credenciales)
+        //{
+        //    try
+        //    {
+        //        var claims = new List<Claim>()
+        //     {
+        //         new Claim("email",credenciales.email)
+
+        //     };
+        //        var usuario = await userManager.FindByEmailAsync(credenciales.email);
+        //        var claimsDB = await userManager.GetClaimsAsync(usuario);
+        //        claims.AddRange(claimsDB);
+        //        var llave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["llaveJWT"]));
+        //        var creds = new SigningCredentials(llave, SecurityAlgorithms.HmacSha256);
+        //        var expiracion = DateTime.Now.AddDays(1);
+        //        var token = new JwtSecurityToken(issuer: null, audience: null, claims: claims, expires: expiracion, signingCredentials: creds);
+
+        //        return new RespuestaAutenticacion()
+        //        {
+        //            token = new JwtSecurityTokenHandler().WriteToken(token),
+        //            expiracion = expiracion,
+        //        };
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return NotFound(e.Message);
+        //    }
+        //}
+
+
         private async Task<ActionResult<RespuestaAutenticacion>> ConstruirToken(CredencialesDto credenciales)
         {
             try
             {
-                var claims = new List<Claim>()
-             {
-                 new Claim("email",credenciales.email)
-
-             };
                 var usuario = await userManager.FindByEmailAsync(credenciales.email);
-                var claimsDB = await userManager.GetClaimsAsync(usuario);
-                claims.AddRange(claimsDB);
+                var roles = await userManager.GetClaimsAsync(usuario);
+
+                var claims = new List<Claim>
+        {
+            new Claim("email", credenciales.email)
+        };
+
+                foreach (var claim in roles)
+                {
+                    if (claim.Type == "role")
+                    {
+                        claims.Add(new Claim("role", claim.Value));
+                    }
+                }
+
                 var llave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["llaveJWT"]));
                 var creds = new SigningCredentials(llave, SecurityAlgorithms.HmacSha256);
                 var expiracion = DateTime.Now.AddDays(1);
-                var token = new JwtSecurityToken(issuer: null, audience: null, claims: claims, expires: expiracion, signingCredentials: creds);
 
-                return new RespuestaAutenticacion()
+                var token = new JwtSecurityToken(
+                    issuer: null,
+                    audience: null,
+                    claims: claims,
+                    expires: expiracion,
+                    signingCredentials: creds
+                );
+
+                var respuestaAutenticacion = new RespuestaAutenticacion
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiracion = expiracion,
+                    expiracion = expiracion
                 };
+
+                return Ok(respuestaAutenticacion);
             }
             catch (Exception e)
             {
                 return NotFound(e.Message);
             }
         }
+
+
 
         [HttpPost("asignarRol")]
         public async Task<ActionResult> asignarRol(string usuarioId, string rol)

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BackPuppy.Validaciones;
+using BackEnd2023.Utilitarios;
+using BackPuppy.Utilidades;
 
 namespace BackPuppy
 {
@@ -20,10 +22,17 @@ namespace BackPuppy
         public void ConfigureServices(IServiceCollection services) {
             services.AddControllers();
 
+            services.AddCors();
+
             services.AddDbContext<AplicationDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("PuppyPlanet")));
             services.AddEndpointsApiExplorer();
 
             services.AddHttpClient();
+
+
+            services.AddTransient<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
+
+            services.AddHttpContextAccessor();
 
             services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<AplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -43,6 +52,13 @@ namespace BackPuppy
 
         public void Configure(IApplicationBuilder app,IWebHostEnvironment env)
         {
+            app.UseCors(options =>
+            {
+                options.WithOrigins("http://localhost:4200");
+                options.AllowAnyMethod();
+                options.AllowAnyHeader();
+
+            });
             // Configure the HTTP request pipeline.
             if (env.IsDevelopment())
             {
@@ -51,6 +67,8 @@ namespace BackPuppy
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
 
             app.UseRouting();
 

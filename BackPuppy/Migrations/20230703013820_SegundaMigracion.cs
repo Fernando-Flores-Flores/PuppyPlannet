@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackPuppy.Migrations
 {
     /// <inheritdoc />
-    public partial class Priemera : Migration
+    public partial class SegundaMigracion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,6 +68,7 @@ namespace BackPuppy.Migrations
                     celular = table.Column<int>(type: "integer", nullable: true),
                     correo = table.Column<string>(type: "text", nullable: true),
                     direccion = table.Column<string>(type: "text", nullable: true),
+                    fotografia = table.Column<string>(type: "text", nullable: true),
                     api_estado = table.Column<string>(type: "text", nullable: true),
                     api_transaccion = table.Column<string>(type: "text", nullable: true),
                     fecha_cre = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),

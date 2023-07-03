@@ -1,0 +1,49 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\53f43eb4-487c-4926-97be-00f6e79ad610.jpg",
+      "PackagePath": "staticwebassets\\personas\\53f43eb4-487c-4926-97be-00f6e79ad610.jpg"
+    },
+    {
+      "Id": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\5ca330ad-25a4-44f7-9f8e-b3d4fd2f8dc6.jpg",
+      "PackagePath": "staticwebassets\\personas\\5ca330ad-25a4-44f7-9f8e-b3d4fd2f8dc6.jpg"
+    },
+    {
+      "Id": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\835f59db-65cc-42bb-af8a-32a5c94da780.jpg",
+      "PackagePath": "staticwebassets\\personas\\835f59db-65cc-42bb-af8a-32a5c94da780.jpg"
+    },
+    {
+      "Id": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\bd8b60e2-4cf0-403b-b240-edaeb97c0845.jpg",
+      "PackagePath": "staticwebassets\\personas\\bd8b60e2-4cf0-403b-b240-edaeb97c0845.jpg"
+    },
+    {
+      "Id": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\ea321114-ad1f-4310-92fd-7b4759b56ad4.jpg",
+      "PackagePath": "staticwebassets\\personas\\ea321114-ad1f-4310-92fd-7b4759b56ad4.jpg"
+    },
+    {
+      "Id": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\f5b663cb-e844-4d34-b93c-343056b52d1e.jpg",
+      "PackagePath": "staticwebassets\\personas\\f5b663cb-e844-4d34-b93c-343056b52d1e.jpg"
+    },
+    {
+      "Id": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\f7dda566-46b7-4235-b45a-18f8a8c1c8e3.jpg",
+      "PackagePath": "staticwebassets\\personas\\f7dda566-46b7-4235-b45a-18f8a8c1c8e3.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.BackPuppy.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.build.BackPuppy.props",
+      "PackagePath": "build\\BackPuppy.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.BackPuppy.props",
+      "PackagePath": "buildMultiTargeting\\BackPuppy.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildTransitive.BackPuppy.props",
+      "PackagePath": "buildTransitive\\BackPuppy.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
