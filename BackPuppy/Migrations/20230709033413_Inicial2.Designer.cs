@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackPuppy.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    [Migration("20230709020239_Inicial")]
-    partial class Inicial
+    [Migration("20230709033413_Inicial2")]
+    partial class Inicial2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,28 +25,33 @@ namespace BackPuppy.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("BackPuppy.Entity.Rol", b =>
+            modelBuilder.Entity("BackPuppy.Entity.duenos", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdDuenos")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdDuenos"));
 
-                    b.Property<int>("IdPersona")
-                        .HasColumnType("integer")
-                        .HasColumnName("id_persona");
-
-                    b.Property<string>("IdTipoOperador")
-                        .IsRequired()
+                    b.Property<string>("apellidoMaterno")
                         .HasColumnType("text")
-                        .HasColumnName("id_tipo_operador");
+                        .HasColumnName("apellido_materno");
+
+                    b.Property<string>("apellidoPaterno")
+                        .HasColumnType("text")
+                        .HasColumnName("apellido_paterno");
 
                     b.Property<string>("api_estado")
                         .HasColumnType("text");
 
                     b.Property<string>("api_transaccion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("correo")
+                        .HasColumnType("text");
+
+                    b.Property<string>("direccion")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("fecha_cre")
@@ -55,16 +60,19 @@ namespace BackPuppy.Migrations
                     b.Property<DateTime?>("fecha_mod")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("nombres")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("telefono")
+                        .HasColumnType("integer");
+
                     b.Property<string>("usuario_mod")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdDuenos");
 
-                    b.HasIndex("IdPersona");
-
-                    b.HasIndex("IdTipoOperador");
-
-                    b.ToTable("roles", "public");
+                    b.ToTable("duenos", "public");
                 });
 
             modelBuilder.Entity("BackPuppy.Entity.persona", b =>
@@ -127,35 +135,6 @@ namespace BackPuppy.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("personas", "public");
-                });
-
-            modelBuilder.Entity("BackPuppy.Entity.tipoOperador", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id_tipo_operador");
-
-                    b.Property<string>("api_estado")
-                        .HasColumnType("text");
-
-                    b.Property<string>("api_transaccion")
-                        .HasColumnType("text");
-
-                    b.Property<string>("descripcion")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("fecha_cre")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("fecha_mod")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("usuario_mod")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("tipo_operadores", "public");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -352,25 +331,6 @@ namespace BackPuppy.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("BackPuppy.Entity.Rol", b =>
-                {
-                    b.HasOne("BackPuppy.Entity.persona", "Persona")
-                        .WithMany()
-                        .HasForeignKey("IdPersona")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackPuppy.Entity.tipoOperador", "TipoOperador")
-                        .WithMany()
-                        .HasForeignKey("IdTipoOperador")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Persona");
-
-                    b.Navigation("TipoOperador");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

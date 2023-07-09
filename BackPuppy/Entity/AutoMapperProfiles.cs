@@ -8,6 +8,7 @@ namespace BackPuppy.Entity
         public AutoMapperProfiles()
         {
             CreateMap<PersonaDto, persona>();
+            CreateMap<DuenosDto, duenos>();
         }
     }
 }
