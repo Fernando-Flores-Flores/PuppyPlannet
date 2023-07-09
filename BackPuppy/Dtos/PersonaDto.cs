@@ -19,6 +19,6 @@ namespace BackPuppy.Dtos
         [Required]
         public String idCuentaIdentity { get; set; }
 
-        public IFormFile fotografia { get; set; }
+        public IFormFile? fotografia { get; set; }
     }
 }

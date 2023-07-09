@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "xR//3OxiyVrtPsQdlHv67qK7EGBhK7VV+Hvq4li8LGg=",
+  "Hash": "l2+ml9yu28hINp8UvSOx48b8q93wx3e2ZHJyLDqMtO4=",
   "Source": "BackPuppy",
   "BasePath": "_content/BackPuppy",
   "Mode": "Default",
@@ -85,6 +85,23 @@
       "OriginalItemSpec": "wwwroot\\personas\\bd8b60e2-4cf0-403b-b240-edaeb97c0845.jpg"
     },
     {
+      "Identity": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\c7166d36-28ef-4732-8515-18755ecf8487.jpg",
+      "SourceId": "BackPuppy",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\",
+      "BasePath": "_content/BackPuppy",
+      "RelativePath": "personas/c7166d36-28ef-4732-8515-18755ecf8487.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\personas\\c7166d36-28ef-4732-8515-18755ecf8487.jpg"
+    },
+    {
       "Identity": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\ea321114-ad1f-4310-92fd-7b4759b56ad4.jpg",
       "SourceId": "BackPuppy",
       "SourceType": "Discovered",
@@ -100,6 +117,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\personas\\ea321114-ad1f-4310-92fd-7b4759b56ad4.jpg"
+    },
+    {
+      "Identity": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\ebc8ced2-8f42-49a8-b411-c84582c76849.png",
+      "SourceId": "BackPuppy",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\",
+      "BasePath": "_content/BackPuppy",
+      "RelativePath": "personas/ebc8ced2-8f42-49a8-b411-c84582c76849.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\personas\\ebc8ced2-8f42-49a8-b411-c84582c76849.png"
     },
     {
       "Identity": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\f5b663cb-e844-4d34-b93c-343056b52d1e.jpg",

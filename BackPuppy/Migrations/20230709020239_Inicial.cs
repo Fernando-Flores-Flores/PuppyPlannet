@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackPuppy.Migrations
 {
     /// <inheritdoc />
-    public partial class SegundaMigracion : Migration
+    public partial class Inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -79,6 +79,24 @@ namespace BackPuppy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_personas", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "tipo_operadores",
+                schema: "public",
+                columns: table => new
+                {
+                    id_tipo_operador = table.Column<string>(type: "text", nullable: false),
+                    descripcion = table.Column<string>(type: "text", nullable: true),
+                    api_estado = table.Column<string>(type: "text", nullable: true),
+                    api_transaccion = table.Column<string>(type: "text", nullable: true),
+                    fecha_cre = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    fecha_mod = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    usuario_mod = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tipo_operadores", x => x.id_tipo_operador);
                 });
 
             migrationBuilder.CreateTable(
@@ -187,6 +205,40 @@ namespace BackPuppy.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "roles",
+                schema: "public",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id_persona = table.Column<int>(type: "integer", nullable: false),
+                    id_tipo_operador = table.Column<string>(type: "text", nullable: false),
+                    api_estado = table.Column<string>(type: "text", nullable: true),
+                    api_transaccion = table.Column<string>(type: "text", nullable: true),
+                    fecha_cre = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    fecha_mod = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    usuario_mod = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_roles", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_roles_personas_id_persona",
+                        column: x => x.id_persona,
+                        principalSchema: "public",
+                        principalTable: "personas",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_roles_tipo_operadores_id_tipo_operador",
+                        column: x => x.id_tipo_operador,
+                        principalSchema: "public",
+                        principalTable: "tipo_operadores",
+                        principalColumn: "id_tipo_operador",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -223,6 +275,18 @@ namespace BackPuppy.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_roles_id_persona",
+                schema: "public",
+                table: "roles",
+                column: "id_persona");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_roles_id_tipo_operador",
+                schema: "public",
+                table: "roles",
+                column: "id_tipo_operador");
         }
 
         /// <inheritdoc />
@@ -244,7 +308,7 @@ namespace BackPuppy.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "personas",
+                name: "roles",
                 schema: "public");
 
             migrationBuilder.DropTable(
@@ -252,6 +316,14 @@ namespace BackPuppy.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "personas",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "tipo_operadores",
+                schema: "public");
         }
     }
 }

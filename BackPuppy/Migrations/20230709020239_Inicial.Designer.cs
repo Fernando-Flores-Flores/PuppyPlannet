@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackPuppy.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    [Migration("20230703013820_SegundaMigracion")]
-    partial class SegundaMigracion
+    [Migration("20230709020239_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,48 @@ namespace BackPuppy.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("BackPuppy.Entity.Rol", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("IdPersona")
+                        .HasColumnType("integer")
+                        .HasColumnName("id_persona");
+
+                    b.Property<string>("IdTipoOperador")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("id_tipo_operador");
+
+                    b.Property<string>("api_estado")
+                        .HasColumnType("text");
+
+                    b.Property<string>("api_transaccion")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("fecha_cre")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("fecha_mod")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("usuario_mod")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdPersona");
+
+                    b.HasIndex("IdTipoOperador");
+
+                    b.ToTable("roles", "public");
+                });
 
             modelBuilder.Entity("BackPuppy.Entity.persona", b =>
                 {
@@ -85,6 +127,35 @@ namespace BackPuppy.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("personas", "public");
+                });
+
+            modelBuilder.Entity("BackPuppy.Entity.tipoOperador", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id_tipo_operador");
+
+                    b.Property<string>("api_estado")
+                        .HasColumnType("text");
+
+                    b.Property<string>("api_transaccion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("descripcion")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("fecha_cre")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("fecha_mod")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("usuario_mod")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tipo_operadores", "public");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -281,6 +352,25 @@ namespace BackPuppy.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("BackPuppy.Entity.Rol", b =>
+                {
+                    b.HasOne("BackPuppy.Entity.persona", "Persona")
+                        .WithMany()
+                        .HasForeignKey("IdPersona")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackPuppy.Entity.tipoOperador", "TipoOperador")
+                        .WithMany()
+                        .HasForeignKey("IdTipoOperador")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Persona");
+
+                    b.Navigation("TipoOperador");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
