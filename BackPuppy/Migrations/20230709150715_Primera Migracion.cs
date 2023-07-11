@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackPuppy.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicial2 : Migration
+    public partial class PrimeraMigracion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -79,6 +79,20 @@ namespace BackPuppy.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "especies",
+                schema: "public",
+                columns: table => new
+                {
+                    id_especie = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    descripcion = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_especies", x => x.id_especie);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "personas",
                 schema: "public",
                 columns: table => new
@@ -103,6 +117,20 @@ namespace BackPuppy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_personas", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "razas",
+                schema: "public",
+                columns: table => new
+                {
+                    id_razas = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    descripcion = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_razas", x => x.id_razas);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,6 +239,53 @@ namespace BackPuppy.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "mascota",
+                schema: "public",
+                columns: table => new
+                {
+                    id_mascota = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    color = table.Column<string>(type: "text", nullable: false),
+                    fecha_nacimiento = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    nombreMascota = table.Column<string>(type: "text", nullable: true),
+                    sexo = table.Column<string>(type: "text", nullable: false),
+                    tatuaje = table.Column<string>(type: "text", nullable: true),
+                    idDueno = table.Column<int>(type: "integer", nullable: false),
+                    idEspecie = table.Column<int>(type: "integer", nullable: false),
+                    IdRaza = table.Column<int>(type: "integer", nullable: false),
+                    api_estado = table.Column<string>(type: "text", nullable: true),
+                    api_transaccion = table.Column<string>(type: "text", nullable: true),
+                    fecha_cre = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    fecha_mod = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    usuario_mod = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mascota", x => x.id_mascota);
+                    table.ForeignKey(
+                        name: "FK_mascota_duenos_idDueno",
+                        column: x => x.idDueno,
+                        principalSchema: "public",
+                        principalTable: "duenos",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_mascota_especies_idEspecie",
+                        column: x => x.idEspecie,
+                        principalSchema: "public",
+                        principalTable: "especies",
+                        principalColumn: "id_especie",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_mascota_razas_IdRaza",
+                        column: x => x.IdRaza,
+                        principalSchema: "public",
+                        principalTable: "razas",
+                        principalColumn: "id_razas",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -247,6 +322,24 @@ namespace BackPuppy.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mascota_idDueno",
+                schema: "public",
+                table: "mascota",
+                column: "idDueno");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mascota_idEspecie",
+                schema: "public",
+                table: "mascota",
+                column: "idEspecie");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mascota_IdRaza",
+                schema: "public",
+                table: "mascota",
+                column: "IdRaza");
         }
 
         /// <inheritdoc />
@@ -268,7 +361,7 @@ namespace BackPuppy.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "duenos",
+                name: "mascota",
                 schema: "public");
 
             migrationBuilder.DropTable(
@@ -280,6 +373,18 @@ namespace BackPuppy.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "duenos",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "especies",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "razas",
+                schema: "public");
         }
     }
 }

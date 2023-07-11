@@ -15,6 +15,11 @@ namespace BackPuppy.Entity
         }
         public DbSet<persona> Personas { get; set; }
 
+        public DbSet<mascota> Mascota { get; set; }
+        public DbSet<razas> Raza { get; set; }
+        public DbSet<especies> Especie { get; set; }
+
+
         //public DbSet<tipoOperador> tipoOperador { get; set; }
         //public DbSet<Rol> Roles { get; set; }
         //V VETERINARIO
