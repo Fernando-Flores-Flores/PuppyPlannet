@@ -16,6 +16,7 @@ namespace BackPuppy.Entity
         public string? nombreMascota { get; set; }
         public string sexo{ get; set; }
         public string? tatuaje { get; set; }
+        public string? foto{ get; set; }
 
         [ForeignKey("Dueno")]
         public int idDueno { get; set; }

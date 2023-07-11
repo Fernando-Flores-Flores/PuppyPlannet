@@ -13,6 +13,7 @@ namespace BackPuppy.Dtos
         public string? nombreMascota { get; set; }
         public string sexo { get; set; }
         public string? tatuaje { get; set; }
+        public string? foto { get; set; }
         public int idDueno { get; set; }
         public int idEspecie { get; set; }
         public int IdRaza { get; set; }
