@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 
 namespace BackPuppy.Controllers
 {
@@ -86,6 +87,47 @@ namespace BackPuppy.Controllers
                 return NotFound(e.Message);
             }
         }
+
+
+        [HttpGet("obtenerDuenosMascota")]
+        public async Task<ActionResult<DuenoMascotaOutDto>> obtenerDuenosMascota([FromQuery, Required] int idDueno)
+        {
+            try
+            {
+                var duenos = await context.Duenos
+                             .Where(d => d.IdDuenos == idDueno)
+                             .ToListAsync();
+                var duenoMascota = new DuenoMascotaOutDto();
+                duenoMascota.nombres = duenos[0].nombres;
+                duenoMascota.apellidoPaterno = duenos[0].apellidoPaterno;
+                duenoMascota.apellidoMaterno = duenos[0].apellidoMaterno;
+                duenoMascota.telefono = duenos[0].telefono;
+                duenoMascota.correo = duenos[0].correo;
+                duenoMascota.direccion = duenos[0].direccion;
+
+                var listaMascotaDb = await context.Mascota
+                         .Where(d => d.idDueno == idDueno)
+                         .ToListAsync();
+                var listaMascotaOutDto = mapper.Map<List<MascotaOutDto>>(listaMascotaDb);
+                duenoMascota.listaMascotas = listaMascotaOutDto;
+
+                var response = new ResponseDto<DuenoMascotaOutDto>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1001,
+                    MensajeRespuesta = "CORRECTO",
+                    datos = duenoMascota
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
+            }
+        }
+
 
 
 

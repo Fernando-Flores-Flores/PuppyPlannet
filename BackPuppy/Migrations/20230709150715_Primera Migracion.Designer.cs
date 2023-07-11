@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackPuppy.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    [Migration("20230709033413_Inicial2")]
-    partial class Inicial2
+    [Migration("20230709150715_Primera Migracion")]
+    partial class PrimeraMigracion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,6 +73,86 @@ namespace BackPuppy.Migrations
                     b.HasKey("IdDuenos");
 
                     b.ToTable("duenos", "public");
+                });
+
+            modelBuilder.Entity("BackPuppy.Entity.especies", b =>
+                {
+                    b.Property<int>("IdEspecie")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id_especie");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdEspecie"));
+
+                    b.Property<string>("descripcion")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.HasKey("IdEspecie");
+
+                    b.ToTable("especies", "public");
+                });
+
+            modelBuilder.Entity("BackPuppy.Entity.mascota", b =>
+                {
+                    b.Property<int>("idMascota")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id_mascota");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("idMascota"));
+
+                    b.Property<int>("IdRaza")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("api_estado")
+                        .HasColumnType("text");
+
+                    b.Property<string>("api_transaccion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("color")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("fecha_cre")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("fecha_mod")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("fecha_nacimiento")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("idDueno")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("idEspecie")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("nombreMascota")
+                        .HasColumnType("text");
+
+                    b.Property<string>("sexo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("tatuaje")
+                        .HasColumnType("text");
+
+                    b.Property<string>("usuario_mod")
+                        .HasColumnType("text");
+
+                    b.HasKey("idMascota");
+
+                    b.HasIndex("IdRaza");
+
+                    b.HasIndex("idDueno");
+
+                    b.HasIndex("idEspecie");
+
+                    b.ToTable("mascota", "public");
                 });
 
             modelBuilder.Entity("BackPuppy.Entity.persona", b =>
@@ -135,6 +215,24 @@ namespace BackPuppy.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("personas", "public");
+                });
+
+            modelBuilder.Entity("BackPuppy.Entity.razas", b =>
+                {
+                    b.Property<int>("IdRaza")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id_razas");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IdRaza"));
+
+                    b.Property<string>("descripcion")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("IdRaza");
+
+                    b.ToTable("razas", "public");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -331,6 +429,33 @@ namespace BackPuppy.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("BackPuppy.Entity.mascota", b =>
+                {
+                    b.HasOne("BackPuppy.Entity.razas", "Raza")
+                        .WithMany()
+                        .HasForeignKey("IdRaza")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackPuppy.Entity.duenos", "Dueno")
+                        .WithMany()
+                        .HasForeignKey("idDueno")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackPuppy.Entity.especies", "Especie")
+                        .WithMany()
+                        .HasForeignKey("idEspecie")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dueno");
+
+                    b.Navigation("Especie");
+
+                    b.Navigation("Raza");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

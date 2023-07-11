@@ -50,5 +50,8 @@ namespace BackPuppy.Validaciones
         //     using the built-in JSON or XML formatters.
         [JsonExtensionData]
         public IDictionary<string, object>? Extensions { get; }
+
+        public string detalles{ get; set; }
+        public string mensaje { get; set; }
     }
 }
