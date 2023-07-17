@@ -11,5 +11,9 @@ namespace BackPuppy.Entity
         public int IdEspecie { get; set; }
         [StringLength(30,ErrorMessage = "El campo descripción no puede tener más de 30 caracteres.")]
         public string descripcion { get; set; }
+
+        [ForeignKey("Raza")]
+        public int IdRaza { get; set; }
+        public razas Raza { get; set; }
     }
 }

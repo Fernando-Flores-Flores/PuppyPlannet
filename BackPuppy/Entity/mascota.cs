@@ -16,6 +16,8 @@ namespace BackPuppy.Entity
         public string? nombreMascota { get; set; }
         public string sexo{ get; set; }
         public string? tatuaje { get; set; }
+        public string? conducta { get; set; }
+
         public string? foto{ get; set; }
 
         [ForeignKey("Dueno")]
@@ -24,12 +26,8 @@ namespace BackPuppy.Entity
         [ForeignKey("Especie")]
         public int idEspecie { get; set; }
 
-        [ForeignKey("Raza")]
-        public int IdRaza { get; set; }
 
         public virtual duenos Dueno{ get; set; }
-        public virtual razas Raza { get; set; }
-
         public virtual especies Especie { get; set; }
     }
 }

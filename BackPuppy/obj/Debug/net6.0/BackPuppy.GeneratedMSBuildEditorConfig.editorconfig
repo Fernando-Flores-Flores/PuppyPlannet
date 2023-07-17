@@ -5,20 +5,13 @@ build_property.UsingMicrosoftNETSdkWeb = true
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
 build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = BackPuppy
 build_property.RootNamespace = BackPuppy
-<<<<<<< HEAD
 build_property.ProjectDir = D:\UMSA\BackPuppy\BackPuppy\BackPuppy\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = D:\UMSA\BackPuppy\BackPuppy\BackPuppy
-=======
-build_property.ProjectDir = C:\Users\YULISA\Documents\ProyectoVeterinaria\PuppyPlannet\BackPuppy\
-build_property.RazorLangVersion = 6.0
-build_property.SupportLocalizedComponentNames = 
-build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\YULISA\Documents\ProyectoVeterinaria\PuppyPlannet\BackPuppy
->>>>>>> 8fa078dba17c3575cefb52b29699e54d006148ec
 build_property._RazorSourceGeneratorDebug = 

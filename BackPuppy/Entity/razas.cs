@@ -9,7 +9,8 @@ namespace BackPuppy.Entity
         [Key]
         [Column("id_razas")]
         public int IdRaza { get; set; }
-
         public string descripcion { get; set; }
+
+
     }
 }
