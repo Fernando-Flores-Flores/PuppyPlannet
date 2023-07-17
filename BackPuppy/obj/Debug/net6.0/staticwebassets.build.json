@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "l2+ml9yu28hINp8UvSOx48b8q93wx3e2ZHJyLDqMtO4=",
+  "Hash": "1CcKsXnD68rkfymVYSjOSFLZcMsSKUHz1EmmhJ7ebRw=",
   "Source": "BackPuppy",
   "BasePath": "_content/BackPuppy",
   "Mode": "Default",
@@ -66,6 +66,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\personas\\835f59db-65cc-42bb-af8a-32a5c94da780.jpg"
+    },
+    {
+      "Identity": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\971dc106-b23e-4cd6-be2e-3cf52f9d1413.png",
+      "SourceId": "BackPuppy",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\",
+      "BasePath": "_content/BackPuppy",
+      "RelativePath": "personas/971dc106-b23e-4cd6-be2e-3cf52f9d1413.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\personas\\971dc106-b23e-4cd6-be2e-3cf52f9d1413.png"
     },
     {
       "Identity": "D:\\UMSA\\BackPuppy\\BackPuppy\\BackPuppy\\wwwroot\\personas\\bd8b60e2-4cf0-403b-b240-edaeb97c0845.jpg",

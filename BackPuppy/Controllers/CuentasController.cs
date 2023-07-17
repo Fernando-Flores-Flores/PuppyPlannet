@@ -4,6 +4,7 @@ using BackPuppy.Validaciones;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
@@ -24,13 +25,15 @@ namespace BackPuppy.Controllers
         private readonly IConfiguration configuration;
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly HttpClient httpClient;
+        private readonly AplicationDbContext context;
 
-        public CuentasController(UserManager<IdentityUser> userManager, IConfiguration configuration, SignInManager<IdentityUser> signInManager, HttpClient httpClient)
+        public CuentasController(UserManager<IdentityUser> userManager, IConfiguration configuration, SignInManager<IdentityUser> signInManager, HttpClient httpClient, AplicationDbContext context)
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.signInManager = signInManager;
             this.httpClient = httpClient;
+            this.context = context;
         }
         [HttpPost("CrearCuentaUsuario")]
         public async Task<ActionResult<ResponseDto<RespuestaAutenticacion>>> CrearCuentaUsuario([FromForm] PersonaDto persona, string password, string rol)
@@ -122,81 +125,6 @@ namespace BackPuppy.Controllers
                 return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
             }
         }
-
-
-        //[HttpPost("CrearCuentaUsuario")]
-        //public async Task<ActionResult<ResponseDto<RespuestaAutenticacion>>> CrearCuentaUsuario([FromBody] PersonaDto persona, string password,string rol)
-        //{
-        //    try
-        //    {
-        //        var credenciales = new CredencialesDto()
-        //        {
-        //            email = persona.correo,
-        //            password = password
-        //        };
-        //        var jsonCredenciales = JsonSerializer.Serialize(credenciales);
-        //        var content = new StringContent(jsonCredenciales, Encoding.UTF8, "application/json");
-        //        HttpResponseMessage respuesta = await httpClient.PostAsync("https://localhost:7101/api/Cuentas/CrearCuentaIdentity", content);
-
-        //        if (respuesta.IsSuccessStatusCode)
-        //        {
-        //            string responseBody = await respuesta.Content.ReadAsStringAsync();
-        //            var responseDto = JsonSerializer.Deserialize<ResponseDto<String>>(responseBody);
-
-        //            if (responseDto.statusCode == 200)
-        //            {   
-        //                persona.idCuentaIdentity = responseDto.datos;
-        //                string jsonData = JsonSerializer.Serialize(persona);
-        //                var contentPersona = new StringContent(jsonData, Encoding.UTF8, "application/json");
-
-        //                HttpResponseMessage response = await httpClient.PostAsync("https://localhost:7101/api/Personas/CrearPersona", contentPersona);
-        //                string responsePersona = await response.Content.ReadAsStringAsync();
-        //                var responseDtoPersona = JsonSerializer.Deserialize<ResponseDto<PersonaDto>>(responsePersona);
-
-
-        //                //AsignarRol
-        //                var usuarioId = persona.idCuentaIdentity;
-        //                var rolEnviar = rol;
-        //                // Crear el objeto que contiene los datos a enviar en el cuerpo
-        //                var data = new { usuarioId, rol };
-        //                // Serializar los datos como JSON
-        //                var json = System.Text.Json.JsonSerializer.Serialize(data);
-
-        //                // Crear el contenido de la solicitud HTTP
-        //                var contenido = new StringContent(json, Encoding.UTF8, "application/json");
-
-        //                // Construir la URL con el parámetro usuarioId
-        //                //   var url = $"https://localhost:7101/api/Cuentas/asignarRol?usuarioId={usuarioId}&rol={rolEnviar}";
-        //                var url = $"https://localhost:7101/api/Cuentas/asignarRol?usuarioId={usuarioId}&rol={rolEnviar}";
-
-        //                // Enviar la solicitud HTTP POST con la URL y el contenido en el cuerpo
-        //                HttpResponseMessage respuestaCrearRol = await httpClient.PostAsync(url, contenido);
-
-        //                var responseContent = await respuestaCrearRol.Content.ReadAsStringAsync();
-
-        //                Console.WriteLine(responseContent);
-
-        //                return Ok(responseDtoPersona);
-        //            }
-        //            else
-        //            {
-        //                return BadRequest(responseDto);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            string responseBody = await respuesta.Content.ReadAsStringAsync();
-        //            var responseDto = JsonSerializer.Deserialize<ResponseDto<String>>(responseBody);
-
-        //            return BadRequest(responseDto);
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
-        //    }
-        //}
-
 
         [HttpPost("CrearCuentaIdentity")]
         public async Task<ActionResult<ResponseDto<string>>> CrearCuentaIdentity([FromBody] CredencialesDto credenciales)
@@ -298,7 +226,10 @@ namespace BackPuppy.Controllers
             {
                 var usuario = await userManager.FindByEmailAsync(credenciales.email);
                 var roles = await userManager.GetClaimsAsync(usuario);
-
+                List<persona> personasFiltradas;
+                var rutaFoto = "";
+                var userId = "";
+                var nombreUsuarioLogeado = "";
                 var claims = new List<Claim>
         {
             new Claim("email", credenciales.email)
@@ -311,6 +242,27 @@ namespace BackPuppy.Controllers
                         claims.Add(new Claim("role", claim.Value));
                     }
                 }
+                //Obtener Imagen
+
+                userId = usuario.Id;
+                    personasFiltradas = await context.Personas.Where(x => x.idCuentaIdentity == userId).ToListAsync();
+                nombreUsuarioLogeado = personasFiltradas[0].nombres + " " + personasFiltradas[0].apellidoPaterno + " " +
+                personasFiltradas[0].apellidoMaterno;
+                    rutaFoto = personasFiltradas[0].fotografia;
+                Claim idClaim = new Claim("Id", userId);
+                Claim nombreUserLogeado = new Claim("nombreUsuarioLogeado", nombreUsuarioLogeado);
+
+                if (rutaFoto != null)
+                {
+                    System.Net.WebClient webClient = new System.Net.WebClient();
+                    byte[] imageBytes = webClient.DownloadData(rutaFoto);
+                    string base64String = System.Convert.ToBase64String(imageBytes);
+                    string imageSrc = "data:image/jpeg;base64," + base64String;
+                    Claim rutaFotoUserLogeado = new Claim("rutaFoto", imageSrc);
+                    claims.Add(rutaFotoUserLogeado);
+                }
+                claims.Add(idClaim);
+                claims.Add(nombreUserLogeado);
 
                 var llave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["llaveJWT"]));
                 var creds = new SigningCredentials(llave, SecurityAlgorithms.HmacSha256);
