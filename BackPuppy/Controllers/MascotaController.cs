@@ -74,7 +74,10 @@ namespace BackPuppy.Controllers
         {
             try
             {
-                List<mascota> mascotasFiltradas = await context.Mascota.ToListAsync();
+                //List<mascota> mascotasFiltradas = await context.Mascota.ToListAsync();
+                List<mascota> mascotasFiltradas = await context.Mascota.Include(m => m.Dueno).ToListAsync();
+
+
                 var response = new ResponseDto<List<mascota>>()
                 {
                     statusCode = StatusCodes.Status200OK,
