@@ -38,16 +38,27 @@ namespace BackPuppy.Controllers
         {
             try
             {
-                List<persona> personasFiltradas;
-                if (idUsuario != "idUsuario")
+                List<persona> personasFiltradas= new List<persona>();
+                if (idUsuario == "usuarios")
                 {
-                    personasFiltradas = await context.Personas.Where(x => x.idCuentaIdentity == idUsuario).ToListAsync();
+                    List<persona> personas;
+                    personas = await context.Personas.ToListAsync();
+                    for (int i = 0; i < personas.Count; i++)
+                    {
+                        if (personas[i].idCuentaIdentity != "a")
+                        {
+                            personasFiltradas.Add(personas[i]);
+                        }
+                    }
                 }
-                else
+                else if (idUsuario == "personas")
                 {
                     personasFiltradas = await context.Personas.ToListAsync();
                 }
-
+                else
+                {
+                    personasFiltradas = await context.Personas.Where(d => d.idCuentaIdentity == idUsuario).ToListAsync();
+                }
                 var response = new ResponseDto<List<persona>>()
                 {
                     statusCode = StatusCodes.Status200OK,
@@ -64,6 +75,7 @@ namespace BackPuppy.Controllers
                 return NotFound(e.Message);
             }
         }
+
 
         [HttpPost("CrearPersona")]
         public async Task<ActionResult<ResponseDto<PersonaDto>>> CrearPersona([FromForm] PersonaDto persona)

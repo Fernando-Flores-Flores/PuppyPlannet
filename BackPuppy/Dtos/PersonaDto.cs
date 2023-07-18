@@ -17,7 +17,7 @@ namespace BackPuppy.Dtos
         public String correo { get; set; }
         public String? direccion { get; set; }
         [Required]
-        public String idCuentaIdentity { get; set; }
+        public String? idCuentaIdentity { get; set; }
 
         public IFormFile? fotografia { get; set; }
     }
