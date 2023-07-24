@@ -11,6 +11,8 @@ namespace BackPuppy.Entity
             CreateMap<DuenosDto, duenos>();
             CreateMap<MascotaDto, mascota>();
             CreateMap<mascota, MascotaOutDto>();
+            CreateMap<AnamnecisDtoIn, ananmnecis>();
+
 
         }
     }

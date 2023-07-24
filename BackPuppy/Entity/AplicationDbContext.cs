@@ -18,6 +18,10 @@ namespace BackPuppy.Entity
         public DbSet<mascota> Mascota { get; set; }
         public DbSet<razas> Raza { get; set; }
         public DbSet<especies> Especie { get; set; }
+        public DbSet<control_medico> controlMedico { get; set; }
+        public DbSet<ananmnecis> Anamnecis { get; set; }
+        public DbSet<consulta_medica> consultaMedica { get; set; }
+
 
 
         //public DbSet<tipoOperador> tipoOperador { get; set; }
