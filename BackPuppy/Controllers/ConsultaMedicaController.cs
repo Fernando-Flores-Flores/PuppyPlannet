@@ -62,5 +62,82 @@ namespace BackPuppy.Controllers
             }
         }
 
+
+        [HttpPost("RegistrarControlFisico")]
+        public async Task<ActionResult<ResponseDto<control_fisico>>> RegistrarControlFisico([FromBody] ControlFisicoDtoIn datos)
+        {
+            try
+            {
+                DateTime localDateTime = DateTime.Now;
+                DateTime utcDateTime = localDateTime.ToUniversalTime();
+
+                DateTime fechaNacimiento = DateTime.Now;
+                string format = "yyyy-MM-dd";
+
+                var datosFormulario = mapper.Map<control_fisico>(datos);
+                datosFormulario.id_mascota = datos.idMascota;
+                datosFormulario.api_estado = "ELABORADO";
+                datosFormulario.api_transaccion = "ELABORAR";
+                datosFormulario.fecha_cre = utcDateTime;
+                datosFormulario.fecha_mod = utcDateTime;
+                datosFormulario.usuario_mod = "LocalDBA";
+
+                context.Add(datosFormulario);
+                await context.SaveChangesAsync();
+
+                var response = new ResponseDto<control_fisico>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1001,
+                    MensajeRespuesta = "CORRECTO",
+                    datos = datosFormulario
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException.ToString());
+            }
+        }
+
+        [HttpPost("RegistrarConsultaMedica")]
+        public async Task<ActionResult<ResponseDto<control_fisico>>> RegistrarConsultaMedica([FromBody] ControlFisicoDtoIn datos)
+        {
+            try
+            {
+                DateTime localDateTime = DateTime.Now;
+                DateTime utcDateTime = localDateTime.ToUniversalTime();
+
+                DateTime fechaNacimiento = DateTime.Now;
+                string format = "yyyy-MM-dd";
+
+                var datosFormulario = mapper.Map<control_fisico>(datos);
+                datosFormulario.id_mascota = datos.idMascota;
+                datosFormulario.api_estado = "ELABORADO";
+                datosFormulario.api_transaccion = "ELABORAR";
+                datosFormulario.fecha_cre = utcDateTime;
+                datosFormulario.fecha_mod = utcDateTime;
+                datosFormulario.usuario_mod = "LocalDBA";
+
+                context.Add(datosFormulario);
+                await context.SaveChangesAsync();
+
+                var response = new ResponseDto<control_fisico>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1001,
+                    MensajeRespuesta = "CORRECTO",
+                    datos = datosFormulario
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException.ToString());
+            }
+        }
+
     }
 }

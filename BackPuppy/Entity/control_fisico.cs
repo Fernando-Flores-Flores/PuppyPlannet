@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BackPuppy.Entity
 {
-    [Table(name: "control_medico", Schema = "public")]
+    [Table(name: "control_fisico", Schema = "public")]
 
-    public class control_medico : ApiEstadosDto
+    public class control_fisico : ApiEstadosDto
     {
         [Key]
-        public int id_control_medico { get; set; }
+        public int id_control_fisico { get; set; }
         public string? temperatura { get; set; }
         public string? frecCardiaca { get; set; }
         public string? frecRespiratoria { get; set; }

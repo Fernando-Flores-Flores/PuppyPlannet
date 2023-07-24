@@ -3,6 +3,7 @@ using System;
 using BackPuppy.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackPuppy.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    partial class AplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230724032400_Control fisico5")]
+    partial class Controlfisico5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,7 +96,7 @@ namespace BackPuppy.Migrations
                     b.Property<int?>("control_fisico")
                         .HasColumnType("integer");
 
-                    b.Property<string>("diagnostico_consulta")
+                    b.Property<string>("diagnostico_consu1ta")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("fecha_cre")
@@ -114,7 +117,7 @@ namespace BackPuppy.Migrations
                     b.Property<int?>("id_mascota")
                         .HasColumnType("integer");
 
-                    b.Property<string>("motivo_consulta")
+                    b.Property<string>("motivo_consu1ta")
                         .HasColumnType("text");
 
                     b.Property<string>("tratamiento")

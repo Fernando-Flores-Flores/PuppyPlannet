@@ -11,13 +11,24 @@ namespace BackPuppy.Entity
     {
         [Key]
         public int id_consulta_medica { get; set; }
-        public string? motivoConsu1ta { get; set; }
-        public string? diagnosticoConsu1ta { get; set; }
+        public string? motivo_consulta { get; set; }
+        public string? diagnostico_consulta { get; set; }
         public string? tratamiento { get; set; }
-        public string? proxVisita { get; set; }
+        public DateTime? fecha_prox_visita { get; set; }
+        public DateTime? fecha_registro_consulta { get; set; }
+
+        [ForeignKey("ananmnecis")]
+        public int? id_anamnesis { get; set; }
+        public ananmnecis ananmnecis { get; set; }
+
+
+        [ForeignKey("controlFisico")]
+        public int? control_fisico { get; set; }
+        public control_fisico controlFisico { get; set; }
+
 
         [ForeignKey("mascota")]
-        public int id_mascota { get; set; }
+        public int? id_mascota { get; set; }
         public mascota mascota { get; set; }
 
     }

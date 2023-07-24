@@ -3,6 +3,7 @@ using System;
 using BackPuppy.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackPuppy.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    partial class AplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230724030244_Control fisico1")]
+    partial class Controlfisico1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,22 +93,25 @@ namespace BackPuppy.Migrations
                     b.Property<string>("api_transaccion")
                         .HasColumnType("text");
 
+                    b.Property<int>("controlFisicoid_control_fisico")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("control_fisico")
                         .HasColumnType("integer");
 
-                    b.Property<string>("diagnostico_consulta")
+                    b.Property<string>("diagnosticoConsu1ta")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("fechaProxVisita")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("fechaRegistroConsulta")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("fecha_cre")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("fecha_mod")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("fecha_prox_visita")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("fecha_registro_consulta")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("id_anamnesis")
@@ -114,7 +120,7 @@ namespace BackPuppy.Migrations
                     b.Property<int?>("id_mascota")
                         .HasColumnType("integer");
 
-                    b.Property<string>("motivo_consulta")
+                    b.Property<string>("motivoConsu1ta")
                         .HasColumnType("text");
 
                     b.Property<string>("tratamiento")
@@ -125,7 +131,7 @@ namespace BackPuppy.Migrations
 
                     b.HasKey("id_consulta_medica");
 
-                    b.HasIndex("control_fisico");
+                    b.HasIndex("controlFisicoid_control_fisico");
 
                     b.HasIndex("id_anamnesis");
 
@@ -606,7 +612,9 @@ namespace BackPuppy.Migrations
                 {
                     b.HasOne("BackPuppy.Entity.control_fisico", "controlFisico")
                         .WithMany()
-                        .HasForeignKey("control_fisico");
+                        .HasForeignKey("controlFisicoid_control_fisico")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BackPuppy.Entity.ananmnecis", "ananmnecis")
                         .WithMany()
