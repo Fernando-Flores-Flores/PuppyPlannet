@@ -102,7 +102,7 @@ namespace BackPuppy.Controllers
         }
 
         [HttpPost("RegistrarConsultaMedica")]
-        public async Task<ActionResult<ResponseDto<control_fisico>>> RegistrarConsultaMedica([FromBody] ControlFisicoDtoIn datos)
+        public async Task<ActionResult<ResponseDto<ConsultaMedicaInDto>>> RegistrarConsultaMedica([FromBody] ConsultaMedicaInDto datos)
         {
             try
             {
@@ -112,8 +112,10 @@ namespace BackPuppy.Controllers
                 DateTime fechaNacimiento = DateTime.Now;
                 string format = "yyyy-MM-dd";
 
-                var datosFormulario = mapper.Map<control_fisico>(datos);
-                datosFormulario.id_mascota = datos.idMascota;
+                var datosFormulario = mapper.Map<consulta_medica>(datos);
+                datosFormulario.id_mascota = datos.id_mascota;
+                datosFormulario.id_control_fisico = datos.id_control_fisico;
+                datosFormulario.id_anamnesis= datos.id_anamnesis;
                 datosFormulario.api_estado = "ELABORADO";
                 datosFormulario.api_transaccion = "ELABORAR";
                 datosFormulario.fecha_cre = utcDateTime;
@@ -123,7 +125,7 @@ namespace BackPuppy.Controllers
                 context.Add(datosFormulario);
                 await context.SaveChangesAsync();
 
-                var response = new ResponseDto<control_fisico>()
+                var response = new ResponseDto<consulta_medica>()
                 {
                     statusCode = StatusCodes.Status200OK,
                     fechaConsulta = DateTime.Now,

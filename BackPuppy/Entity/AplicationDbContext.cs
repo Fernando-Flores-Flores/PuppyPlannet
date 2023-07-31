@@ -21,6 +21,8 @@ namespace BackPuppy.Entity
         public DbSet<control_fisico> controlMedico { get; set; }
         public DbSet<ananmnecis> Anamnecis { get; set; }
         public DbSet<consulta_medica> consultaMedica { get; set; }
+        public DbSet<vacunas> vacunas { get; set; }
+
 
 
 

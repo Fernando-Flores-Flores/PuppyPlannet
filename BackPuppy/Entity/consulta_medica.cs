@@ -14,8 +14,8 @@ namespace BackPuppy.Entity
         public string? motivo_consulta { get; set; }
         public string? diagnostico_consulta { get; set; }
         public string? tratamiento { get; set; }
-        public DateTime? fecha_prox_visita { get; set; }
-        public DateTime? fecha_registro_consulta { get; set; }
+        public string? fecha_prox_visita { get; set; }
+        public string? fecha_registro_consulta { get; set; }
 
         [ForeignKey("ananmnecis")]
         public int? id_anamnesis { get; set; }
@@ -23,7 +23,7 @@ namespace BackPuppy.Entity
 
 
         [ForeignKey("controlFisico")]
-        public int? control_fisico { get; set; }
+        public int? id_control_fisico { get; set; }
         public control_fisico controlFisico { get; set; }
 
 
