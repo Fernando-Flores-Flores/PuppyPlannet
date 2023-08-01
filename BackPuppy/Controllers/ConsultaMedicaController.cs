@@ -5,6 +5,7 @@ using BackPuppy.Validaciones;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
@@ -149,27 +150,59 @@ namespace BackPuppy.Controllers
             try
             {
                 var consultaMedica = await context.consultaMedica
-                .FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.consulta_medica a WHERE a.id_mascota = {0}", idMascota)
-                .ToListAsync();
-
-               
+     .FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.consulta_medica a WHERE a.id_mascota = {0}", idMascota)
+     .ToListAsync();
                 var historial = new HistorialConsultaMedica();
-                historial.motivo_consulta = consultaMedica[0].nombres;
-                historial.diagnostico_consulta = consultaMedica[0].apellidoPaterno;
-                historial.tratamiento = consultaMedica[0].apellidoMaterno;
-                historial.fecha_prox_visita = consultaMedica[0].telefono;
-                historial.fecha_registro_consulta = consultaMedica[0].telefono;
+                historial.id_mascota = idMascota;
+                var listaConsultaMedica = new List<ConsultaMedicaDtoOut>();
+
+                foreach (var medica in consultaMedica)
+                {
+                    var consulta = new ConsultaMedicaDtoOut();
+                    consulta.id_mascota = medica.id_mascota;
+                    consulta.id_consulta_medica= medica.id_consulta_medica;
+                    consulta.motivo_consulta = medica.motivo_consulta;
+                    consulta.diagnostico_consulta=medica.diagnostico_consulta;
+                    consulta.tratamiento=medica.tratamiento;
+                    consulta.fecha_prox_visita = medica.fecha_prox_visita;
+                    consulta.fecha_registro_consulta = medica.fecha_registro_consulta;
+                    consulta.id_anamnesis = medica.id_anamnesis;
+                    consulta.id_control_fisico = medica.id_control_fisico;
+
+                    Console.WriteLine($"Id Consulta Médica: {medica.id_consulta_medica}");
+                    Console.WriteLine($"Motivo Consulta: {medica.motivo_consulta}");
+                    Console.WriteLine($"Diagnóstico Consulta: {medica.diagnostico_consulta}");
+                    Console.WriteLine($"Diagnóstico Consulta: {medica.motivo_consulta}");
+                    Console.WriteLine($"Tratamiento: {medica.tratamiento}");
+                    Console.WriteLine($"Fecha Prox. visita: {medica.fecha_prox_visita}");
+                    Console.WriteLine($"Fecha Registro consulta: {medica.fecha_registro_consulta}");
+
+                   
+                    Console.WriteLine("========================");
+                }
+
+
+           
+
+        //        foreach (var item in consultaMedica)
+        //        {
+        //            listaConsultaMedica.id_mascota = item.apellidoPaterno;
+        //            listaConsultaMedica.tratamiento = consultaMedica[0].apellidoMaterno;
+        //            listaConsultaMedica.fecha_prox_visita = consultaMedica[0].telefono;
+        //            listaConsultaMedica.fecha_registro_consulta = consultaMedica[0].telefono;
+        //        }
+          
 
 
 
-        historial.correo = consultaMedica[0].correo;
-                historial.direccion = consultaMedica[0].direccion;
+        //historial.correo = consultaMedica[0].correo;
+        //        historial.direccion = consultaMedica[0].direccion;
 
-                var listaMascotaDb = await context.Mascota
-                         .Where(d => d.idDueno == idDueno)
-                         .ToListAsync();
-                var listaMascotaOutDto = mapper.Map<List<MascotaOutDto>>(listaMascotaDb);
-                duenoMascota.listaMascotas = listaMascotaOutDto;
+        //        var listaMascotaDb = await context.Mascota
+        //                 .Where(d => d.idDueno == idDueno)
+        //                 .ToListAsync();
+        //        var listaMascotaOutDto = mapper.Map<List<MascotaOutDto>>(listaMascotaDb);
+        //        duenoMascota.listaMascotas = listaMascotaOutDto;
 
                 var response = new ResponseDto<DuenoMascotaOutDto>()
                 {
@@ -177,7 +210,7 @@ namespace BackPuppy.Controllers
                     fechaConsulta = DateTime.Now,
                     codigoRespuesta = 1001,
                     MensajeRespuesta = "CORRECTO",
-                    datos = duenoMascota
+                    datos = null
                 };
                 return Ok(response);
             }
