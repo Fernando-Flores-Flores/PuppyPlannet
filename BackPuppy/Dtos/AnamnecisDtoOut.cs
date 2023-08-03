@@ -4,7 +4,7 @@ namespace BackPuppy.Dtos
 {
     public class AnamnecisDtoOut
     {
-        public BigInteger id_ananmnecis { get; set; }
+        public int? id_ananmnecis { get; set; }
         public string? apetito { get; set; }
         public string? agua { get; set; }
         public string? conducta { get; set; }

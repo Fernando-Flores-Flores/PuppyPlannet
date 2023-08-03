@@ -169,48 +169,36 @@ namespace BackPuppy.Controllers
                     consulta.id_anamnesis = medica.id_anamnesis;
                     consulta.id_control_fisico = medica.id_control_fisico;
 
-                    Console.WriteLine($"Id Consulta Médica: {medica.id_consulta_medica}");
-                    Console.WriteLine($"Motivo Consulta: {medica.motivo_consulta}");
-                    Console.WriteLine($"Diagnóstico Consulta: {medica.diagnostico_consulta}");
-                    Console.WriteLine($"Diagnóstico Consulta: {medica.motivo_consulta}");
-                    Console.WriteLine($"Tratamiento: {medica.tratamiento}");
-                    Console.WriteLine($"Fecha Prox. visita: {medica.fecha_prox_visita}");
-                    Console.WriteLine($"Fecha Registro consulta: {medica.fecha_registro_consulta}");
+                    var listaAnamnecis = new List<AnamnecisDtoOut>();
+                    var listaAnam= await context.Anamnecis.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.ananmnecis a WHERE a.id_ananmnecis = {0}", idMascota).ToListAsync();
 
-                   
-                    Console.WriteLine("========================");
+                    foreach (var item in listaAnam)
+                    {
+                        var anamnecis = new AnamnecisDtoOut();
+                        anamnecis.id_ananmnecis = item.id_ananmnecis;
+                        anamnecis.apetito = item.apetito;
+                        anamnecis.agua= item.agua;
+                        anamnecis.conducta=item.conducta;
+                        anamnecis.defecacion=item.defecacion;
+                        anamnecis.alteracionesRes=item.alteracionesRes;
+                        anamnecis.alteracionesNeuro=item.alteracionesNeuro;
+                        anamnecis.problemasUr=item.problemasUr;
+                        listaAnamnecis.Add(anamnecis);
+                    }
+                    consulta.listaAnamnecis=listaAnamnecis;
+                    listaConsultaMedica.Add(consulta);
                 }
+               
 
+                historial.listaConsultaMedica = listaConsultaMedica;
 
-           
-
-        //        foreach (var item in consultaMedica)
-        //        {
-        //            listaConsultaMedica.id_mascota = item.apellidoPaterno;
-        //            listaConsultaMedica.tratamiento = consultaMedica[0].apellidoMaterno;
-        //            listaConsultaMedica.fecha_prox_visita = consultaMedica[0].telefono;
-        //            listaConsultaMedica.fecha_registro_consulta = consultaMedica[0].telefono;
-        //        }
-          
-
-
-
-        //historial.correo = consultaMedica[0].correo;
-        //        historial.direccion = consultaMedica[0].direccion;
-
-        //        var listaMascotaDb = await context.Mascota
-        //                 .Where(d => d.idDueno == idDueno)
-        //                 .ToListAsync();
-        //        var listaMascotaOutDto = mapper.Map<List<MascotaOutDto>>(listaMascotaDb);
-        //        duenoMascota.listaMascotas = listaMascotaOutDto;
-
-                var response = new ResponseDto<DuenoMascotaOutDto>()
+                var response = new ResponseDto<HistorialConsultaMedica>()
                 {
                     statusCode = StatusCodes.Status200OK,
                     fechaConsulta = DateTime.Now,
                     codigoRespuesta = 1001,
                     MensajeRespuesta = "CORRECTO",
-                    datos = null
+                    datos = historial
                 };
                 return Ok(response);
             }

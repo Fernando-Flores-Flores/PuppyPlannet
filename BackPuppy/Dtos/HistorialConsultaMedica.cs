@@ -6,7 +6,7 @@ namespace BackPuppy.Dtos
 {
     public class HistorialConsultaMedica
     {
-        public BigInteger id_mascota { get; set; }
+        public int id_mascota { get; set; }
         public List<ConsultaMedicaDtoOut> listaConsultaMedica{ get; set; }
 
         
