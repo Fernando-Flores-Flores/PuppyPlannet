@@ -25,18 +25,20 @@ namespace BackPuppy.Controllers
         }
 
 
-
+        // El que hay que mejorar
         [HttpGet("obtenerRazas")]
-        public async Task<ActionResult<List<especies>>> obtenerRazas([FromQuery, Required] string descripcionEspecie)
+        public async Task<ActionResult<List<razas>>> obtenerRazas([FromQuery, Required] string descripcionEspecie)
         {
             try
             {
-                var razas  = await this.context.Especie
-            .Include(e => e.Raza)
-            .Where(e => e.descripcion == descripcionEspecie)
+                var especie = await this.context.Especie.Where(e => e.descripcion == descripcionEspecie)
             .ToListAsync();
 
-                var response = new ResponseDto<List<especies>>()
+              var idEspecie = especie[0].IdEspecie;
+                var razas  = await this.context.Raza.Where(e => e.IdEspecie == idEspecie)
+            .ToListAsync();
+
+                var response = new ResponseDto<List<razas>>()
                 {
                     statusCode = StatusCodes.Status200OK,
                     fechaConsulta = DateTime.Now,

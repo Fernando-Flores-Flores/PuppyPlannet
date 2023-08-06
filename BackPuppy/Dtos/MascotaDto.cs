@@ -17,7 +17,7 @@ namespace BackPuppy.Dtos
 
         public string? foto { get; set; }
         public int idDueno { get; set; }
-        public int idEspecie { get; set; }
+        public int idRaza { get; set; }
 
         //public virtual duenos Dueno { get; set; }
         //public virtual razas Raza { get; set; }

@@ -23,11 +23,11 @@ namespace BackPuppy.Entity
         [ForeignKey("Dueno")]
         public int idDueno { get; set; }
         
-        [ForeignKey("Especie")]
-        public int idEspecie { get; set; }
+        [ForeignKey("Raza")]
+        public int idRaza { get; set; }
 
 
         public virtual duenos Dueno{ get; set; }
-        public virtual especies Especie { get; set; }
+        public virtual razas Raza { get; set; }
     }
 }
