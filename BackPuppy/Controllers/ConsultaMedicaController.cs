@@ -170,7 +170,7 @@ namespace BackPuppy.Controllers
                     consulta.id_control_fisico = medica.id_control_fisico;
 
                     var listaAnamnecis = new List<AnamnecisDtoOut>();
-                    var listaAnam= await context.Anamnecis.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.ananmnecis a WHERE a.id_ananmnecis = {0}", idMascota).ToListAsync();
+                    var listaAnam= await context.Anamnecis.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.ananmnecis a WHERE a.id_ananmnecis = {0}", consulta.id_anamnesis).ToListAsync();
 
                     foreach (var item in listaAnam)
                     {
@@ -186,9 +186,26 @@ namespace BackPuppy.Controllers
                         listaAnamnecis.Add(anamnecis);
                     }
                     consulta.listaAnamnecis=listaAnamnecis;
+                  
+
+                    var listaControlFisico = new List<ControlFisicoDtoOut>();
+                    var listaControlFis = await context.controlFisico.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.control_fisico a WHERE a.id_control_fisico = {0}", consulta.id_control_fisico).ToListAsync();
+                    foreach (var item in listaControlFis)
+                    {
+                        var controlFis = new ControlFisicoDtoOut();
+                        controlFis.id_control_fisico = item.id_control_fisico;
+                        controlFis.temperatura = item.temperatura;
+                        controlFis.frecCardiaca = item.frecCardiaca;
+                        controlFis.frecRespiratoria = item.frecRespiratoria;
+                        controlFis.peso = item.peso;
+                       
+                        listaControlFisico.Add(controlFis);
+                    }
+                    consulta.listaControlFisico = listaControlFisico;
                     listaConsultaMedica.Add(consulta);
+
                 }
-               
+
 
                 historial.listaConsultaMedica = listaConsultaMedica;
 
