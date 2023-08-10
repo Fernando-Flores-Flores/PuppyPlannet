@@ -11,12 +11,8 @@ namespace BackPuppy.Dtos
         
         [RegularExpression(@"^\d{4}-\d{2}-\d{2}$", ErrorMessage = "El formato de la fecha proxima desparacitacion es inválido. Debe ser 'yyyy-MM-dd'.")]
         public string? fecha_proxima_desparacitacion { get; set; }
-        public string? frec_cardiaca_despara { get; set; }
-        public string? frec_respiratoria_despara { get; set; }
-        public string? peso_desparactacion { get; set; }
         public string? principio_activo { get; set; }
         public string? producto_desparacitacion { get; set; }
-        public string? temperatura_desparacitacion { get; set; }
         public string? tipo_desparacitacion { get; set; }
         public string? via_desparacitcion { get; set; }
 

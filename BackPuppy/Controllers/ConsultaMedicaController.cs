@@ -185,7 +185,7 @@ namespace BackPuppy.Controllers
                         anamnecis.problemasUr=item.problemasUr;
                         listaAnamnecis.Add(anamnecis);
                     }
-                    consulta.listaAnamnecis=listaAnamnecis;
+                    consulta.datosAnamnecis=listaAnamnecis;
                   
 
                     var listaControlFisico = new List<ControlFisicoDtoOut>();
@@ -201,14 +201,87 @@ namespace BackPuppy.Controllers
                        
                         listaControlFisico.Add(controlFis);
                     }
-                    consulta.listaControlFisico = listaControlFisico;
+                    consulta.datosControlFisico = listaControlFisico;
                     listaConsultaMedica.Add(consulta);
-
                 }
-
 
                 historial.listaConsultaMedica = listaConsultaMedica;
 
+                //vacunas
+                var vacunas = await context.vacunas
+    .FromSqlRaw("select * from vetmypuppyplanet.public.vacunas v where v.id_mascota in({0})", idMascota)
+    .ToListAsync();
+                var vacunasBase = new VacunaOutDto();
+                vacunasBase.id_mascota = idMascota;
+                var listaVacunas = new List<VacunaOutDto>();
+
+                foreach (var vacuna in vacunas)
+                {
+                    var vacuna1 = new VacunaOutDto();
+                    vacuna1.id_mascota = vacuna.id_mascota;
+                    vacuna1.descripcion_vacuna = vacuna.descripcion_vacuna;
+                    vacuna1.laboratorio = vacuna.laboratorio;
+                    vacuna1.fecha_vacunacion = vacuna.fecha_vacunacion;
+                    vacuna1.fecha_revacunacion = vacuna.fecha_revacunacion;
+                    vacuna1.id_control_fisico = vacuna.id_control_fisico;
+                    vacuna1.id_control_fisico = vacuna.id_control_fisico;
+
+                    var listaControlFisico = new List<ControlFisicoDtoOut>();
+                    var listaControlFis = await context.controlFisico.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.control_fisico a WHERE a.id_control_fisico = {0}", vacuna1.id_control_fisico).ToListAsync();
+                    foreach (var item in listaControlFis)
+                    {
+                        var controlFis = new ControlFisicoDtoOut();
+                        controlFis.id_control_fisico = item.id_control_fisico;
+                        controlFis.temperatura = item.temperatura;
+                        controlFis.frecCardiaca = item.frecCardiaca;
+                        controlFis.frecRespiratoria = item.frecRespiratoria;
+                        controlFis.peso = item.peso;
+
+                        listaControlFisico.Add(controlFis);
+                    }
+                    vacuna1.datosControlFisico = listaControlFisico;
+                    listaVacunas.Add(vacuna1);
+                }
+                historial.listaVacunas = listaVacunas;
+
+                //Desparacitaciones
+                var desparacitaciones = await context.Desparacitacion
+    .FromSqlRaw("select * from vetmypuppyplanet.public.desparacitaciones v where v.id_mascota in({0})", idMascota)
+    .ToListAsync();
+                var desparacitacionBase = new DesparacitacionOutDto();
+                desparacitacionBase.id_mascota = idMascota;
+                var listaDesparacitacion = new List<DesparacitacionOutDto>();
+
+                foreach (var desparacitacion in desparacitaciones)
+                {
+                    var vacuna1 = new DesparacitacionOutDto();
+                    vacuna1.id_mascota = desparacitacion.id_mascota;
+                    vacuna1.fecha_desparacitacion = desparacitacion.fecha_desparacitacion;
+                    vacuna1.fecha_proxima_desparacitacion = desparacitacion.fecha_proxima_desparacitacion;
+                    vacuna1.principio_activo = desparacitacion.principio_activo;
+                    vacuna1.producto_desparacitacion = desparacitacion.producto_desparacitacion;
+                    vacuna1.tipo_desparacitacion = desparacitacion.tipo_desparacitacion;
+                    vacuna1.via_desparacitcion = desparacitacion.via_desparacitcion;
+
+                    vacuna1.id_control_fisico = desparacitacion.id_control_fisico;
+
+                    var listaControlFisico = new List<ControlFisicoDtoOut>();
+                    var listaControlFis = await context.controlFisico.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.control_fisico a WHERE a.id_control_fisico = {0}", vacuna1.id_control_fisico).ToListAsync();
+                    foreach (var item in listaControlFis)
+                    {
+                        var controlFis = new ControlFisicoDtoOut();
+                        controlFis.id_control_fisico = item.id_control_fisico;
+                        controlFis.temperatura = item.temperatura;
+                        controlFis.frecCardiaca = item.frecCardiaca;
+                        controlFis.frecRespiratoria = item.frecRespiratoria;
+                        controlFis.peso = item.peso;
+
+                        listaControlFisico.Add(controlFis);
+                    }
+                    vacuna1.datosControlFisico = listaControlFisico;
+                    listaDesparacitacion.Add(vacuna1);
+                }
+                historial.listaDesparaciones = listaDesparacitacion;
                 var response = new ResponseDto<HistorialConsultaMedica>()
                 {
                     statusCode = StatusCodes.Status200OK,
@@ -225,6 +298,5 @@ namespace BackPuppy.Controllers
                 return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
             }
         }
-
     }
 }
