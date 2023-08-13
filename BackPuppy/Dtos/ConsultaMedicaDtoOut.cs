@@ -14,9 +14,9 @@ namespace BackPuppy.Dtos
         public string? fecha_prox_visita { get; set; }
         public string? fecha_registro_consulta { get; set; }
         public int? id_anamnesis { get; set; }
-        public List<AnamnecisDtoOut> datosAnamnecis { get; set; }
+        public AnamnecisDtoOut datosAnamnecis { get; set; }
         public int? id_control_fisico { get; set; }
-        public List<ControlFisicoDtoOut> datosControlFisico { get; set; }
+        public ControlFisicoDtoOut datosControlFisico { get; set; }
 
     }
 }

@@ -14,6 +14,6 @@ namespace BackPuppy.Dtos
         public string? via_desparacitcion { get; set; }
         public int? id_mascota { get; set; }
         public int? id_control_fisico { get; set; } 
-        public List<ControlFisicoDtoOut> datosControlFisico { get; set; }
+        public ControlFisicoDtoOut datosControlFisico { get; set; }
     }
 }

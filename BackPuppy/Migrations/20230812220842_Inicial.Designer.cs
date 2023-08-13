@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackPuppy.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    [Migration("20230810022956_inicial")]
-    partial class inicial
+    [Migration("20230812220842_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

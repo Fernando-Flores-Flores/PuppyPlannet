@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace BackPuppy.Controllers
@@ -94,5 +95,60 @@ namespace BackPuppy.Controllers
                 return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException.ToString());
             }
         }
+
+        [HttpPut("ActualizarMascota/{idMascota}")]
+        public async Task<ActionResult<ResponseDto<MascotaDto>>> ActualizarMascota(int idMascota, [FromBody] mascota mascota)
+        {
+            if (idMascota != mascota.idMascota)
+            {
+                return BadRequest("El Id del autor  no coincide con el id de la URL");
+            }
+            try
+            {
+                var existe = await context.Mascota.AnyAsync(x => x.idMascota== idMascota);
+                if (!existe)
+                {
+                    return NotFound();
+                }
+                var mascotaExistente = await context.Mascota.FindAsync(idMascota);
+                DateTime FechaCreacion = DateTime.Now.ToUniversalTime();
+                DateTime FechaModificacion = DateTime.Now.ToUniversalTime();
+                DateTime FechaO = (DateTime)mascota.fecha_nacimiento;
+                DateTime FechaOrden = FechaO.ToUniversalTime();
+                var mascotaNueva = new mascota()
+                {
+                    idMascota= mascota.idMascota,
+                    fecha_nacimiento= FechaOrden,
+                    foto= mascota.foto,
+                    color = mascota.color,
+                     nombreMascota=mascota.nombreMascota,
+                    sexo =mascota.sexo,
+                    tatuaje=mascota.tatuaje,
+                    conducta =mascota.conducta,
+                    idDueno=mascota.idDueno,
+                    idRaza =mascota.idRaza,
+                    api_estado = "editado",
+            
+                };
+                context.Update(mascotaNueva);
+                await context.SaveChangesAsync();
+                var lista = new List<mascota>();
+                lista.Add(mascotaNueva);
+                var response = new ResponseDto<List<mascota>>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1001,
+                    MensajeRespuesta = "CORRECTO",
+                    datos = lista
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException.ToString());
+            }
+        }
+
     }
 }

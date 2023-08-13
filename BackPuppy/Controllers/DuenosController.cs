@@ -106,7 +106,7 @@ namespace BackPuppy.Controllers
                 duenoMascota.direccion = duenos[0].direccion;
 
                 var listaMascotaDb = await context.Mascota
-                         .Where(d => d.idDueno == idDueno)
+                         .Where(d => d.idDueno == idDueno).Include(m=>m.Raza)
                          .ToListAsync();
                 var listaMascotaOutDto = mapper.Map<List<MascotaOutDto>>(listaMascotaDb);
                 duenoMascota.listaMascotas = listaMascotaOutDto;

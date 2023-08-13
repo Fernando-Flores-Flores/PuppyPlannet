@@ -20,7 +20,7 @@ namespace BackPuppy.Dtos
         public int idEspecie { get; set; }
 
         //public virtual duenos Dueno { get; set; }
-        //public virtual razas Raza { get; set; }
+        public virtual razas Raza { get; set; }
 
         //public virtual especies Especie { get; set; }
     

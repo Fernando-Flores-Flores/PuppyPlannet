@@ -27,7 +27,7 @@ namespace BackPuppy.Entity
         public int idRaza { get; set; }
 
 
-        public virtual duenos Dueno{ get; set; }
-        public virtual razas Raza { get; set; }
+        public virtual duenos? Dueno{ get; set; }
+        public virtual razas? Raza { get; set; }
     }
 }
