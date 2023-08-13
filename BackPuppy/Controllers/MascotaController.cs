@@ -128,6 +128,7 @@ namespace BackPuppy.Controllers
                     idDueno=mascota.idDueno,
                     idRaza =mascota.idRaza,
                     api_estado = "editado",
+
             
                 };
                 context.Update(mascotaNueva);
