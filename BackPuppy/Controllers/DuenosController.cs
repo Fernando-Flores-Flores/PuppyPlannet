@@ -128,6 +128,57 @@ namespace BackPuppy.Controllers
             }
         }
 
+        [HttpPut("ActualizarDueno/{idDueno}")]
+        public async Task<ActionResult<ResponseDto<DuenosDto>>> ActualizarDueno(int idDueno, [FromBody] duenos duenoActualizado)
+        {
+            if (idDueno != duenoActualizado.IdDuenos)
+            {
+                return BadRequest("El Id del Dueño no coincide con el id de la URL");
+            }
+
+            try
+            {
+                var duenoExistente = await context.Duenos.FindAsync(idDueno);
+
+                if (duenoExistente == null)
+                {
+                    return NotFound(); // Mascota no encontrada
+                }
+
+                //DateTime FechaO = (DateTime)duenoActualizado.fe;
+                //DateTime FechaOrden = FechaO.ToUniversalTime();
+                DateTime localDateTime = DateTime.Now;
+                DateTime utcDateTime = localDateTime.ToUniversalTime();
+                // Actualizar las propiedades de la mascota existente
+                duenoExistente.nombres = duenoActualizado.nombres;
+                duenoExistente.apellidoPaterno = duenoActualizado.apellidoPaterno;
+                duenoExistente.apellidoMaterno = duenoActualizado.apellidoMaterno;
+                duenoExistente.telefono = duenoActualizado.telefono;
+                duenoExistente.correo = duenoActualizado.correo;
+                duenoExistente.direccion = duenoActualizado.direccion;
+                duenoExistente.api_estado = "EDITADO";
+                duenoExistente.fecha_mod = utcDateTime;
+
+                await context.SaveChangesAsync();
+
+                var response = new ResponseDto<duenos>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1001,
+                    MensajeRespuesta = "CORRECTO",
+                    datos = duenoExistente
+                };
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException.ToString());
+            }
+        }
+
+
 
 
 

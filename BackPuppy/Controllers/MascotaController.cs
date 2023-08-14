@@ -97,52 +97,50 @@ namespace BackPuppy.Controllers
         }
 
         [HttpPut("ActualizarMascota/{idMascota}")]
-        public async Task<ActionResult<ResponseDto<MascotaDto>>> ActualizarMascota(int idMascota, [FromBody] mascota mascota)
+        public async Task<ActionResult<ResponseDto<MascotaDto>>> ActualizarMascota(int idMascota, [FromBody] mascota mascotaActualizada)
         {
-            if (idMascota != mascota.idMascota)
+            if (idMascota != mascotaActualizada.idMascota)
             {
-                return BadRequest("El Id del autor  no coincide con el id de la URL");
+                return BadRequest("El Id del autor no coincide con el id de la URL");
             }
+
             try
             {
-                var existe = await context.Mascota.AnyAsync(x => x.idMascota== idMascota);
-                if (!existe)
-                {
-                    return NotFound();
-                }
                 var mascotaExistente = await context.Mascota.FindAsync(idMascota);
-                DateTime FechaCreacion = DateTime.Now.ToUniversalTime();
-                DateTime FechaModificacion = DateTime.Now.ToUniversalTime();
-                DateTime FechaO = (DateTime)mascota.fecha_nacimiento;
-                DateTime FechaOrden = FechaO.ToUniversalTime();
-                var mascotaNueva = new mascota()
-                {
-                    idMascota= mascota.idMascota,
-                    fecha_nacimiento= FechaOrden,
-                    foto= mascota.foto,
-                    color = mascota.color,
-                     nombreMascota=mascota.nombreMascota,
-                    sexo =mascota.sexo,
-                    tatuaje=mascota.tatuaje,
-                    conducta =mascota.conducta,
-                    idDueno=mascota.idDueno,
-                    idRaza =mascota.idRaza,
-                    api_estado = "editado",
 
-            
-                };
-                context.Update(mascotaNueva);
+                if (mascotaExistente == null)
+                {
+                    return NotFound(); // Mascota no encontrada
+                }
+
+                DateTime FechaO = (DateTime)mascotaActualizada.fecha_nacimiento;
+                DateTime FechaOrden = FechaO.ToUniversalTime();
+                DateTime localDateTime = DateTime.Now;
+                DateTime utcDateTime = localDateTime.ToUniversalTime();
+                // Actualizar las propiedades de la mascota existente
+                mascotaExistente.fecha_nacimiento = FechaOrden;
+                mascotaExistente.foto = mascotaActualizada.foto;
+                mascotaExistente.color = mascotaActualizada.color;
+                mascotaExistente.nombreMascota = mascotaActualizada.nombreMascota;
+                mascotaExistente.sexo = mascotaActualizada.sexo;
+                mascotaExistente.tatuaje = mascotaActualizada.tatuaje;
+                mascotaExistente.conducta = mascotaActualizada.conducta;
+                //mascotaExistente.idDueno = mascotaActualizada.idDueno;
+                //mascotaExistente.idRaza = mascotaActualizada.idRaza;
+                mascotaExistente.api_estado = "EDITADO";
+                mascotaExistente.fecha_mod = utcDateTime;
+
                 await context.SaveChangesAsync();
-                var lista = new List<mascota>();
-                lista.Add(mascotaNueva);
-                var response = new ResponseDto<List<mascota>>()
+
+                var response = new ResponseDto<mascota>()
                 {
                     statusCode = StatusCodes.Status200OK,
                     fechaConsulta = DateTime.Now,
                     codigoRespuesta = 1001,
                     MensajeRespuesta = "CORRECTO",
-                    datos = lista
+                    datos = mascotaExistente
                 };
+
                 return Ok(response);
             }
             catch (Exception e)
@@ -150,6 +148,7 @@ namespace BackPuppy.Controllers
                 return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException.ToString());
             }
         }
+
 
     }
 }
