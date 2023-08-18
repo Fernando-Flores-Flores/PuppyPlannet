@@ -97,12 +97,12 @@ namespace BackPuppy.Controllers
         }
 
         [HttpPut("ActualizarMascota/{idMascota}")]
-        public async Task<ActionResult<ResponseDto<MascotaDto>>> ActualizarMascota(int idMascota, [FromBody] mascota mascotaActualizada)
+        public async Task<ActionResult<ResponseDto<MascotaDto>>> ActualizarMascota(int idMascota, [FromBody] MascotaDto mascotaActualizada)
         {
-            if (idMascota != mascotaActualizada.idMascota)
-            {
-                return BadRequest("El Id del autor no coincide con el id de la URL");
-            }
+            //if (idMascota != mascotaActualizada.idMascota)
+            //{
+            //    return BadRequest("El Id del autor no coincide con el id de la URL");
+            //}
 
             try
             {
@@ -113,7 +113,10 @@ namespace BackPuppy.Controllers
                     return NotFound(); // Mascota no encontrada
                 }
 
-                DateTime FechaO = (DateTime)mascotaActualizada.fecha_nacimiento;
+                //DateTime FechaO = (DateTime)mascotaActualizada.fecha_nacimiento;
+                string fechaTexto = mascotaActualizada.fecha_nacimiento;
+                DateTime FechaO = DateTime.ParseExact(fechaTexto, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
                 DateTime FechaOrden = FechaO.ToUniversalTime();
                 DateTime localDateTime = DateTime.Now;
                 DateTime utcDateTime = localDateTime.ToUniversalTime();
