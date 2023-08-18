@@ -88,16 +88,19 @@ namespace BackPuppy.Controllers
                         contentPersona.Add(new StringContent(persona.celular.ToString()), "celular");
                         contentPersona.Add(new StringContent(persona.correo), "correo");
                         contentPersona.Add(new StringContent(persona.direccion), "direccion");
-                  
-                        var fotografiaStream = persona.fotografia.OpenReadStream();
-                        var fotografiaContent = new StreamContent(fotografiaStream);
-                        fotografiaContent.Headers.ContentType = new MediaTypeHeaderValue(persona.fotografia.ContentType);
-                        fotografiaContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                        if(persona.fotografia!= null)
                         {
-                            Name = "fotografia",
-                            FileName = persona.fotografia.FileName
-                        };
-                        contentPersona.Add(fotografiaContent);
+                            var fotografiaStream = persona.fotografia.OpenReadStream();
+                            var fotografiaContent = new StreamContent(fotografiaStream);
+                            fotografiaContent.Headers.ContentType = new MediaTypeHeaderValue(persona.fotografia.ContentType);
+                            fotografiaContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                            {
+                                Name = "fotografia",
+                                FileName = persona.fotografia.FileName
+                            };
+                            contentPersona.Add(fotografiaContent);
+                        }
+                      
 
                         HttpResponseMessage response = await httpClient.PostAsync("https://localhost:7101/api/Personas/CrearPersona", contentPersona);
                         string responsePersona = await response.Content.ReadAsStringAsync();
