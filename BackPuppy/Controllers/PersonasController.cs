@@ -38,6 +38,7 @@ namespace BackPuppy.Controllers
         {
             try
             {
+                var claims = "CORRECTO";
                 List<persona> personasFiltradas= new List<persona>();
                 if (idUsuario == "usuarios")
                 {
@@ -58,6 +59,10 @@ namespace BackPuppy.Controllers
                 else
                 {
                     personasFiltradas = await context.Personas.Where(d => d.idCuentaIdentity == idUsuario).ToListAsync();
+
+                   claims = await context.UserClaims
+    .Where(c => c.UserId == idUsuario).Select(c => c.ClaimValue)
+    .FirstOrDefaultAsync();
                 }
                 var response = new ResponseDto<List<persona>>()
                 {
@@ -65,7 +70,8 @@ namespace BackPuppy.Controllers
                     fechaConsulta = DateTime.Now,
                     codigoRespuesta = 1001,
                     MensajeRespuesta = "CORRECTO",
-                    datos = personasFiltradas
+                    datos = personasFiltradas,
+                    base64 = claims
                 };
                 return Ok(response);
             }

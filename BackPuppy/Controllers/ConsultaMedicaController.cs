@@ -216,9 +216,10 @@ namespace BackPuppy.Controllers
                 vacunasBase.id_mascota = idMascota;
                 var listaVacunas = new List<VacunaOutDto>();
 
-                var vacuna1 = new VacunaOutDto();
+              
                 foreach (var vacuna in vacunas)
                 {
+                    var vacuna1 = new VacunaOutDto();
                     vacuna1.id_mascota = vacuna.id_mascota;
                     vacuna1.descripcion_vacuna = vacuna.descripcion_vacuna;
                     vacuna1.laboratorio = vacuna.laboratorio;
