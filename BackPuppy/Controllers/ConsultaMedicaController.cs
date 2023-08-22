@@ -225,7 +225,7 @@ namespace BackPuppy.Controllers
                     vacuna1.laboratorio = vacuna.laboratorio;
                     vacuna1.fecha_vacunacion = vacuna.fecha_vacunacion;
                     vacuna1.fecha_revacunacion = vacuna.fecha_revacunacion;
-                    vacuna1.id_control_fisico = vacuna.id_control_fisico;
+                    vacuna1.id_vacuna = vacuna.id_vacuna;
                     vacuna1.id_control_fisico = vacuna.id_control_fisico;
 
                     //var listaControlFisico = new List<ControlFisicoDtoOut>();
@@ -267,6 +267,8 @@ namespace BackPuppy.Controllers
                     vacuna2.via_desparacitcion = desparacitacion.via_desparacitcion;
 
                     vacuna2.id_control_fisico = desparacitacion.id_control_fisico;
+                    vacuna2.id_desparacitacion = desparacitacion.id_desparacitacion;
+
 
                     //var listaControlFisico = new List<ControlFisicoDtoOut>();
                     var listaControlFis = await context.controlFisico.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.control_fisico a WHERE a.id_control_fisico = {0}", vacuna2.id_control_fisico).ToListAsync();

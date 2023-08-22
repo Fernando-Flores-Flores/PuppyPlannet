@@ -16,6 +16,9 @@ namespace BackPuppy.Entity
             CreateMap<ConsultaMedicaInDto, consulta_medica>();
             CreateMap<vacunaInDto, vacunas>();
             CreateMap<DesparacitacionesInDto, desparacitaciones>();
+            CreateMap<PrimeraCOnsultaInDto, primera_consulta>();
+            CreateMap<CirugiaInDto, cirugia>();
+
 
         }
     }
