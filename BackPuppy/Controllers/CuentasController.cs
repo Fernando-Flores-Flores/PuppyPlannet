@@ -178,6 +178,64 @@ namespace BackPuppy.Controllers
         }
 
 
+        [HttpPut("ActualizarCuentaIdentity/{idCuentaIdentity}")]
+        public async Task<ActionResult<ResponseDto<string>>> ActualizarCuentaIdentity(string idCuentaIdentity, [FromBody] CredencialesDto actualizacionCredenciales)
+        {
+            try
+            {
+                var usuario = await userManager.FindByIdAsync(idCuentaIdentity);
+
+                if (usuario == null)
+                {
+                    return NotFound("Usuario no encontrado");
+                }
+
+                usuario.UserName = actualizacionCredenciales.email;
+                usuario.Email = actualizacionCredenciales.email;
+
+                var token = await userManager.GeneratePasswordResetTokenAsync(usuario);
+                var resultadoReset = await userManager.ResetPasswordAsync(usuario, token, actualizacionCredenciales.password);
+
+                if (resultadoReset.Succeeded)
+                {
+                    var resultadoUpdate = await userManager.UpdateAsync(usuario);
+
+                    if (resultadoUpdate.Succeeded)
+                    {
+                        var response = new ResponseDto<string>
+                        {
+                            statusCode = StatusCodes.Status200OK,
+                            fechaConsulta = DateTime.Now,
+                            codigoRespuesta = 1001,
+                            MensajeRespuesta = "CORRECTO",
+                            datos = "Cuenta actualizada exitosamente"
+                        };
+                        return Ok(response);
+                    }
+                }
+
+                var errores = resultadoReset.Errors.Select(e => e.Description).ToList();
+
+                var responseError = new ResponseDto<string>
+                {
+                    statusCode = StatusCodes.Status400BadRequest,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1002,
+                    MensajeRespuesta = "ERROR",
+                    datos = string.Join(", ", errores)
+                };
+                return BadRequest(responseError);
+            }
+            catch (Exception e)
+            {
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
+            }
+        }
+
+
+
+
+
         [HttpPost("login")]
         public async Task<ActionResult<RespuestaAutenticacion>> loginUsuario([FromBody] CredencialesDto credenciales)
         {
@@ -192,36 +250,6 @@ namespace BackPuppy.Controllers
             }
 
         }
-
-        //private async Task<ActionResult<RespuestaAutenticacion>> ConstruirToken(CredencialesDto credenciales)
-        //{
-        //    try
-        //    {
-        //        var claims = new List<Claim>()
-        //     {
-        //         new Claim("email",credenciales.email)
-
-        //     };
-        //        var usuario = await userManager.FindByEmailAsync(credenciales.email);
-        //        var claimsDB = await userManager.GetClaimsAsync(usuario);
-        //        claims.AddRange(claimsDB);
-        //        var llave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["llaveJWT"]));
-        //        var creds = new SigningCredentials(llave, SecurityAlgorithms.HmacSha256);
-        //        var expiracion = DateTime.Now.AddDays(1);
-        //        var token = new JwtSecurityToken(issuer: null, audience: null, claims: claims, expires: expiracion, signingCredentials: creds);
-
-        //        return new RespuestaAutenticacion()
-        //        {
-        //            token = new JwtSecurityTokenHandler().WriteToken(token),
-        //            expiracion = expiracion,
-        //        };
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return NotFound(e.Message);
-        //    }
-        //}
-
 
         private async Task<ActionResult<RespuestaAutenticacion>> ConstruirToken(CredencialesDto credenciales)
         {
@@ -331,6 +359,8 @@ namespace BackPuppy.Controllers
             };
             return Ok(response);
         }
+
+       
 
 
     }
