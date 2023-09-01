@@ -139,75 +139,184 @@ namespace BackPuppy.Controllers
         }
 
         [HttpPut("ActualizarPersona/{idCuentaIdentity}")]
-        public async Task<ActionResult<ResponseDto<PersonaDto>>> ActualizarDueno(string idCuentaIdentity, [FromBody] PersonaDto personaActualizada, bool actualizaCredenciales
-            ,string password = "opcional")
+        public async Task<ActionResult<ResponseDto<PersonaDto>>> ActualizarPersona(
+            string idCuentaIdentity,
+            [FromBody] PersonaDto personaActualizada,
+            bool actualizaCredenciales,
+            string password = "opcional"
+        )
         {
             if (idCuentaIdentity != personaActualizada.idCuentaIdentity)
             {
                 return BadRequest("El idCuentaIdentity del Dueño no coincide con el id de la URL");
             }
+
             try
             {
-                var personaExistente = await context.Personas.FirstOrDefaultAsync(p=> p.idCuentaIdentity== idCuentaIdentity);
+                var personaExistente = await ObtenerPersonaExistenteAsync(idCuentaIdentity);
 
                 if (personaExistente == null)
                 {
-                    return NotFound(); // Mascota no encontrada
+                    return NotFound();
                 }
 
-                DateTime localDateTime = DateTime.Now;
-                DateTime utcDateTime = localDateTime.ToUniversalTime();
-                // Actualizar las propiedades de la persona existente
-                personaExistente.carnet = personaActualizada.carnet;
-                personaExistente.celular = personaActualizada.celular;
-                personaExistente.nombres = personaActualizada.nombres?.ToUpper();
-                personaExistente.apellidoPaterno = personaActualizada.apellidoPaterno?.ToUpper();
-                personaExistente.apellidoMaterno = personaActualizada.apellidoMaterno?.ToUpper();
-                personaExistente.direccion = personaActualizada.direccion?.ToUpper();
-                personaExistente.api_estado = "EDITADO";
-                personaExistente.fecha_mod = utcDateTime;
-                personaExistente.usuario_mod = "OBTENER TOKEN";
+                ActualizarDatosPersona(personaExistente, personaActualizada);
+
                 if (actualizaCredenciales)
                 {
-                    personaExistente.correo = personaActualizada.correo;
-                    var credenciales = new CredencialesDto()
-                    {
-                        email = personaActualizada.correo,
-                        password = password
-                    };
-                    var jsonCredenciales = JsonSerializer.Serialize(credenciales);
-                    var content = new StringContent(jsonCredenciales, Encoding.UTF8, "application/json");
-                    HttpResponseMessage respuesta = await httpClient.PostAsync("https://localhost:7101/api/Cuentas/ActualizarCuentaIdentity/"+ idCuentaIdentity, content);
-                    Console.WriteLine(respuesta);
-                    if (respuesta.IsSuccessStatusCode)
-                    {
-                        string responseBody = await respuesta.Content.ReadAsStringAsync();
-                        var responseDto = JsonSerializer.Deserialize<ResponseDto<String>>(responseBody);
+                    var exitoActualizacionCredenciales = await ActualizarCredencialesAsync(idCuentaIdentity, personaActualizada.correo, password);
 
-                        if (responseDto.statusCode == 200)
-                        {
-                        }
+                    if (!exitoActualizacionCredenciales)
+                    {
+                        return StatusCode(StatusCodes.Status500InternalServerError, "Error al actualizar credenciales");
                     }
                 }
 
                 await context.SaveChangesAsync();
 
-                var response = new ResponseDto<string>()
+                return Ok(new ResponseDto<string>()
                 {
                     statusCode = StatusCodes.Status200OK,
                     fechaConsulta = DateTime.Now,
                     codigoRespuesta = 1001,
-                    MensajeRespuesta = "CORRECTO",
+                    MensajeRespuesta = actualizaCredenciales ? "CORRECTO ACTUALIZACIÓN PERSONA Y CREDENCIALES" : "CORRECTO ACTUALIZACIÓN PERSONA",
                     datos = personaExistente.idCuentaIdentity
-                };
-
-                return Ok(response);
+                });
             }
             catch (Exception e)
             {
-                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException.ToString());
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException?.ToString());
             }
         }
+
+        private async Task<persona> ObtenerPersonaExistenteAsync(string idCuentaIdentity)
+        {
+            return await context.Personas.FirstOrDefaultAsync(p => p.idCuentaIdentity == idCuentaIdentity);
+        }
+
+        private void ActualizarDatosPersona(persona personaExistente, PersonaDto personaActualizada)
+        {
+            DateTime utcDateTime = DateTime.Now.ToUniversalTime();
+
+            personaExistente.carnet = personaActualizada.carnet;
+            personaExistente.celular = personaActualizada.celular;
+            personaExistente.nombres = personaActualizada.nombres?.ToUpper();
+            personaExistente.apellidoPaterno = personaActualizada.apellidoPaterno?.ToUpper();
+            personaExistente.apellidoMaterno = personaActualizada.apellidoMaterno?.ToUpper();
+            personaExistente.direccion = personaActualizada.direccion?.ToUpper();
+            personaExistente.api_estado = "EDITADO";
+            personaExistente.fecha_mod = utcDateTime;
+            personaExistente.usuario_mod = "OBTENER TOKEN";
+        }
+
+        private async Task<bool> ActualizarCredencialesAsync(string idCuentaIdentity, string correo, string password)
+        {
+            var credenciales = new CredencialesDto()
+            {
+                email = correo,
+                password = password
+            };
+
+            var jsonCredenciales = JsonSerializer.Serialize(credenciales);
+            var content = new StringContent(jsonCredenciales, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage respuesta = await httpClient.PutAsync($"https://localhost:7101/api/Cuentas/ActualizarCuentaIdentity/{idCuentaIdentity}", content);
+
+            if (respuesta.IsSuccessStatusCode)
+            {
+                string responseBody = await respuesta.Content.ReadAsStringAsync();
+                var responseDto = JsonSerializer.Deserialize<ResponseDto<string>>(responseBody);
+
+                return responseDto.statusCode == 200;
+            }
+
+            return false;
+        }
+
+
+
+        //[HttpPut("ActualizarPersona/{idCuentaIdentity}")]
+        //public async Task<ActionResult<ResponseDto<PersonaDto>>> ActualizarDueno(string idCuentaIdentity, [FromBody] PersonaDto personaActualizada, bool actualizaCredenciales
+        //    ,string password = "opcional")
+        //{
+        //    if (idCuentaIdentity != personaActualizada.idCuentaIdentity)
+        //    {
+        //        return BadRequest("El idCuentaIdentity del Dueño no coincide con el id de la URL");
+        //    }
+        //    try
+        //    {
+        //        var personaExistente = await context.Personas.FirstOrDefaultAsync(p=> p.idCuentaIdentity== idCuentaIdentity);
+
+        //        if (personaExistente == null)
+        //        {
+        //            return NotFound();
+        //        }
+
+        //        DateTime localDateTime = DateTime.Now;
+        //        DateTime utcDateTime = localDateTime.ToUniversalTime();
+
+        //        personaExistente.carnet = personaActualizada.carnet;
+        //        personaExistente.celular = personaActualizada.celular;
+        //        personaExistente.nombres = personaActualizada.nombres?.ToUpper();
+        //        personaExistente.apellidoPaterno = personaActualizada.apellidoPaterno?.ToUpper();
+        //        personaExistente.apellidoMaterno = personaActualizada.apellidoMaterno?.ToUpper();
+        //        personaExistente.direccion = personaActualizada.direccion?.ToUpper();
+        //        personaExistente.api_estado = "EDITADO";
+        //        personaExistente.fecha_mod = utcDateTime;
+        //        personaExistente.usuario_mod = "OBTENER TOKEN";
+        //        if (actualizaCredenciales)
+        //        {
+        //            personaExistente.correo = personaActualizada.correo;
+        //            var credenciales = new CredencialesDto()
+        //            {
+        //                email = personaActualizada.correo,
+        //                password = password
+        //            };
+        //            var jsonCredenciales = JsonSerializer.Serialize(credenciales);
+        //            var content = new StringContent(jsonCredenciales, Encoding.UTF8, "application/json");
+        //            HttpResponseMessage respuesta = await httpClient.PutAsync("https://localhost:7101/api/Cuentas/ActualizarCuentaIdentity/"+ idCuentaIdentity, content);
+        //            Console.WriteLine(respuesta);
+        //            if (respuesta.IsSuccessStatusCode)
+        //            {
+        //                string responseBody = await respuesta.Content.ReadAsStringAsync();
+        //                var responseDto = JsonSerializer.Deserialize<ResponseDto<String>>(responseBody);
+
+        //                if (responseDto.statusCode == 200)
+        //                {
+        //                    await context.SaveChangesAsync();
+
+        //                    var response1 = new ResponseDto<string>()
+        //                    {
+        //                        statusCode = StatusCodes.Status200OK,
+        //                        fechaConsulta = DateTime.Now,
+        //                        codigoRespuesta = 1001,
+        //                        MensajeRespuesta = "CORRECTO ACTUALIZCIÖN PERSONA Y CREDENCIALES",
+        //                        datos = personaExistente.idCuentaIdentity
+        //                    };
+
+        //                    return Ok(response1);
+        //                }
+        //            }
+        //        }
+
+        //        await context.SaveChangesAsync();
+
+        //        var response = new ResponseDto<string>()
+        //        {
+        //            statusCode = StatusCodes.Status200OK,
+        //            fechaConsulta = DateTime.Now,
+        //            codigoRespuesta = 1001,
+        //            MensajeRespuesta = "CORRECTO ACTUALIZCIÖN PERSONA",
+        //            datos = personaExistente.idCuentaIdentity
+        //        };
+
+        //        return Ok(response);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException.ToString());
+        //    }
+        //}
 
     }
 } 
