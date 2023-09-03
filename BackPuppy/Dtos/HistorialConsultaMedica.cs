@@ -9,11 +9,7 @@ namespace BackPuppy.Dtos
         public int id_mascota { get; set; }
         public List<ConsultaMedicaDtoOut> listaConsultaMedica{ get; set; }
         public List<VacunaOutDto> listaVacunas { get; set; }
-
         public List<DesparacitacionOutDto> listaDesparaciones { get; set; }
-
-
-
-
+        public List<CirugiaOutDto> listaCirugias { get; set; }
     }
 }

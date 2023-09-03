@@ -216,7 +216,7 @@ namespace BackPuppy.Controllers
                 vacunasBase.id_mascota = idMascota;
                 var listaVacunas = new List<VacunaOutDto>();
 
-              
+
                 foreach (var vacuna in vacunas)
                 {
                     var vacuna1 = new VacunaOutDto();
@@ -230,7 +230,7 @@ namespace BackPuppy.Controllers
 
                     //var listaControlFisico = new List<ControlFisicoDtoOut>();
                     var listaControlFis = await context.controlFisico.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.control_fisico a WHERE a.id_control_fisico = {0}", vacuna1.id_control_fisico).ToListAsync();
-                    
+
                     var controlFis = new ControlFisicoDtoOut();
                     foreach (var item in listaControlFis)
                     {
@@ -288,6 +288,60 @@ namespace BackPuppy.Controllers
                     listaDesparacitacion.Add(vacuna2);
                 }
                 historial.listaDesparaciones = listaDesparacitacion;
+
+                //Cirugias
+                
+                var cirugias = await context.Cirugia
+    .FromSqlRaw("select * from vetmypuppyplanet.public.cirugia c where c.id_mascota in({0});", idMascota)
+    .ToListAsync();
+                var cirugiaBase = new CirugiaOutDto();
+                cirugiaBase.id_mascota = idMascota;
+                var listaCirugias = new List<CirugiaOutDto>();
+
+
+                foreach (var cirug in cirugias)
+                {
+                    var cirugia1 = new CirugiaOutDto();
+                    cirugia1.id_mascota = cirug.id_mascota;
+                    cirugia1.descripcion_cirugia = cirug.descripcion_cirugia;
+                    cirugia1.fecha_cirugia = cirug.fecha_cirugia;
+                    cirugia1.observaciones_cirugia = cirug.observaciones_cirugia;
+                    cirugia1.tipo_cirugia = cirug.tipo_cirugia;
+                    cirugia1.id_control_fisico = cirug.id_control_fisico;
+                    cirugia1.id_anamnesis = cirug.id_anamnesis;
+
+                    var listaControlFis = await context.controlFisico.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.control_fisico a WHERE a.id_control_fisico = {0}", cirugia1.id_control_fisico).ToListAsync();
+
+                    var controlFis = new ControlFisicoDtoOut();
+                    foreach (var item in listaControlFis)
+                    {
+                        controlFis.id_control_fisico = item.id_control_fisico;
+                        controlFis.temperatura = item.temperatura;
+                        controlFis.frecCardiaca = item.frecCardiaca;
+                        controlFis.frecRespiratoria = item.frecRespiratoria;
+                        controlFis.peso = item.peso;
+                    }
+                    cirugia1.datosControlFisico = controlFis;
+
+                    var listaAnam = await context.Anamnecis.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.ananmnecis a WHERE a.id_ananmnecis = {0}", cirugia1.id_anamnesis).ToListAsync();
+                    var anamnecis = new AnamnecisDtoOut();
+
+                    foreach (var item in listaAnam)
+                    {
+                        anamnecis.id_ananmnecis = item.id_ananmnecis;
+                        anamnecis.apetito = item.apetito;
+                        anamnecis.agua = item.agua;
+                        anamnecis.conducta = item.conducta;
+                        anamnecis.defecacion = item.defecacion;
+                        anamnecis.alteracionesRes = item.alteracionesRes;
+                        anamnecis.alteracionesNeuro = item.alteracionesNeuro;
+                        anamnecis.problemasUr = item.problemasUr;
+                    }
+                    cirugia1.datosAnamnecis = anamnecis;
+                    listaCirugias.Add(cirugia1);
+                }
+                historial.listaCirugias = listaCirugias;
+
                 var response = new ResponseDto<HistorialConsultaMedica>()
                 {
                     statusCode = StatusCodes.Status200OK,
