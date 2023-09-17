@@ -302,6 +302,7 @@ namespace BackPuppy.Controllers
                 foreach (var cirug in cirugias)
                 {
                     var cirugia1 = new CirugiaOutDto();
+                    cirugia1.id_cirugia = cirug.id_cirugia;
                     cirugia1.id_mascota = cirug.id_mascota;
                     cirugia1.descripcion_cirugia = cirug.descripcion_cirugia;
                     cirugia1.fecha_cirugia = cirug.fecha_cirugia;

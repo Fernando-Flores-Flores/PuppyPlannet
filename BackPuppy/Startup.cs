@@ -7,6 +7,8 @@ using System.Text;
 using BackPuppy.Validaciones;
 using BackEnd2023.Utilitarios;
 using BackPuppy.Utilidades;
+using BackPuppy.Dtos;
+using BackPuppy.Facade;
 
 namespace BackPuppy
 {
@@ -45,7 +47,9 @@ namespace BackPuppy
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["llaveJWT"])),
                 ClockSkew = TimeSpan.Zero
             });
-           // services.AddIdentity<ApplicationUser, IdentityRole>().AddErrorDescriber<SpanishIdentityErrorDescriber>();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.AddScoped<EmailService>();
+            // services.AddIdentity<ApplicationUser, IdentityRole>().AddErrorDescriber<SpanishIdentityErrorDescriber>();
             services.AddSwaggerGen();
             services.AddAutoMapper(typeof(Startup));    
         }

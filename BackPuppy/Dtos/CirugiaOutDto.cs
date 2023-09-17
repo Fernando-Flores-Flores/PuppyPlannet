@@ -4,6 +4,7 @@ namespace BackPuppy.Dtos
 {
     public class CirugiaOutDto
     {
+        public int? id_cirugia { get; set; }
         public string descripcion_cirugia { get; set; }
         public string fecha_cirugia { get; set; }
         public string observaciones_cirugia { get; set; }
