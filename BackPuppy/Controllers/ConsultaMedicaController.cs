@@ -359,5 +359,69 @@ namespace BackPuppy.Controllers
                 return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
             }
         }
+
+
+        [HttpGet("obtenerVacunas")]
+        public async Task<ActionResult<HistorialConsultaMedica>> obtenerVacunasMascota()
+        {
+            try
+            {
+
+
+                //vacunas
+                var listavacunasBD = await context.vacunas
+    .FromSqlRaw("select * from vetmypuppyplanet.public.vacunas v").ToListAsync();
+              
+                var listaVacunasRs = new List<VacunaOutDto>();
+
+
+                foreach (var vacuna in listavacunasBD)
+                {
+                    var vacuna1 = new VacunaOutDto();
+                    vacuna1.id_mascota = vacuna.id_mascota;
+                    vacuna1.descripcion_vacuna = vacuna.descripcion_vacuna;
+                    vacuna1.laboratorio = vacuna.laboratorio;
+                    vacuna1.fecha_vacunacion = vacuna.fecha_vacunacion;
+                    vacuna1.fecha_revacunacion = vacuna.fecha_revacunacion;
+                    vacuna1.id_vacuna = vacuna.id_vacuna;
+                    vacuna1.id_control_fisico = vacuna.id_control_fisico;
+
+                    var listaControlFisBD = await context.controlFisico.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.control_fisico a WHERE a.id_control_fisico = {0}", vacuna1.id_control_fisico).ToListAsync();
+
+                    var controlFis = new ControlFisicoDtoOut();
+                    foreach (var item in listaControlFisBD)
+                    {
+                        controlFis.id_control_fisico = item.id_control_fisico;
+                        controlFis.temperatura = item.temperatura;
+                        controlFis.frecCardiaca = item.frecCardiaca;
+                        controlFis.frecRespiratoria = item.frecRespiratoria;
+                        controlFis.peso = item.peso;
+
+                        //listaControlFisico.Add(controlFis);
+                    }
+                    vacuna1.datosControlFisico = controlFis;
+                    listaVacunasRs.Add(vacuna1);
+                }
+                            
+
+                var response = new ResponseDto<List<VacunaOutDto>>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1001,
+                    MensajeRespuesta = "CORRECTO",
+                    datos = listaVacunasRs
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
+            }
+        }
+
+
+
     }
 }
