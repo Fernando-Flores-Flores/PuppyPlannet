@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\UMSA\\BackPuppy\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj": {}
+    "C:\\Users\\YULISA\\Documents\\ProyectoVeterinaria\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj": {}
   },
   "projects": {
-    "D:\\UMSA\\BackPuppy\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj": {
+    "C:\\Users\\YULISA\\Documents\\ProyectoVeterinaria\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\UMSA\\BackPuppy\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
+        "projectUniqueName": "C:\\Users\\YULISA\\Documents\\ProyectoVeterinaria\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
         "projectName": "BackPuppy",
-        "projectPath": "D:\\UMSA\\BackPuppy\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
-        "packagesPath": "C:\\Users\\fernando.flores\\.nuget\\packages\\",
-        "outputPath": "D:\\UMSA\\BackPuppy\\PuppyPlannet\\BackPuppy\\obj\\",
+        "projectPath": "C:\\Users\\YULISA\\Documents\\ProyectoVeterinaria\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
+        "packagesPath": "C:\\Users\\YULISA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\YULISA\\Documents\\ProyectoVeterinaria\\PuppyPlannet\\BackPuppy\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\fernando.flores\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\YULISA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -94,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

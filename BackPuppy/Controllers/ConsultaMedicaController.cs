@@ -421,7 +421,225 @@ namespace BackPuppy.Controllers
             }
         }
 
+        [HttpGet("obtenerConsultas")]
+        public async Task<ActionResult<HistorialConsultaMedica>> obtenerConsultasMascota()
+        {
+            try
+            {
 
+
+                //vacunas
+                var listaconsultasBD = await context.consultaMedica
+    .FromSqlRaw("select * from vetmypuppyplanet.public.consulta_medica v").ToListAsync();
+
+                var listaConsultas = new List<ConsultaMedicaDtoOut>();
+
+
+                foreach (var consulta1 in listaconsultasBD)
+                {
+                    var consulta = new ConsultaMedicaDtoOut();
+                    consulta.id_mascota = consulta1.id_mascota;
+                    consulta.id_consulta_medica = consulta1.id_consulta_medica;
+                    consulta.motivo_consulta = consulta1.motivo_consulta;
+                    consulta.diagnostico_consulta = consulta1.diagnostico_consulta;
+                    consulta.tratamiento = consulta1.tratamiento;
+                    consulta.fecha_prox_visita = consulta1.fecha_prox_visita;
+                    consulta.fecha_registro_consulta = consulta1.fecha_registro_consulta;
+                    consulta.id_anamnesis = consulta1.id_anamnesis;
+                    consulta.id_control_fisico = consulta1.id_control_fisico;
+
+                    var listaAnam = await context.Anamnecis.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.ananmnecis a WHERE a.id_ananmnecis = {0}", consulta1.id_anamnesis).ToListAsync();
+                    var anamnecis = new AnamnecisDtoOut();
+
+                    foreach (var item in listaAnam)
+                    {
+                        anamnecis.id_ananmnecis = item.id_ananmnecis;
+                        anamnecis.apetito = item.apetito;
+                        anamnecis.agua = item.agua;
+                        anamnecis.conducta = item.conducta;
+                        anamnecis.defecacion = item.defecacion;
+                        anamnecis.alteracionesRes = item.alteracionesRes;
+                        anamnecis.alteracionesNeuro = item.alteracionesNeuro;
+                        anamnecis.problemasUr = item.problemasUr;
+                        //listaAnamnecis.Add(anamnecis);
+                    }
+                    consulta.datosAnamnecis = anamnecis;
+
+                    var listaControlFisBD = await context.controlFisico.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.control_fisico a WHERE a.id_control_fisico = {0}", consulta1.id_control_fisico).ToListAsync();
+
+                    var controlFis = new ControlFisicoDtoOut();
+                    foreach (var item in listaControlFisBD)
+                    {
+                        controlFis.id_control_fisico = item.id_control_fisico;
+                        controlFis.temperatura = item.temperatura;
+                        controlFis.frecCardiaca = item.frecCardiaca;
+                        controlFis.frecRespiratoria = item.frecRespiratoria;
+                        controlFis.peso = item.peso;
+
+                        //listaControlFisico.Add(controlFis);
+                    }
+                    consulta.datosControlFisico = controlFis;
+                    listaConsultas.Add(consulta);
+                }
+
+
+                var response = new ResponseDto<List<ConsultaMedicaDtoOut>>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1001,
+                    MensajeRespuesta = "CORRECTO",
+                    datos = listaConsultas
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
+            }
+        }
+
+        [HttpGet("obtenerCirugias")]
+        public async Task<ActionResult<HistorialConsultaMedica>> obtenerCirugiasMascota()
+        {
+            try
+            {
+
+
+                //vacunas
+                var listacirugiasBD = await context.Cirugia
+    .FromSqlRaw("select * from vetmypuppyplanet.public.cirugia v").ToListAsync();
+
+                var listaCirugia= new List<CirugiaOutDto>();
+
+
+                foreach (var cirug in listaCirugia)
+                {
+                    var cirugia1 = new CirugiaOutDto();
+                    cirugia1.id_cirugia = cirug.id_cirugia;
+                    cirugia1.id_mascota = cirug.id_mascota;
+                    cirugia1.descripcion_cirugia = cirug.descripcion_cirugia;
+                    cirugia1.fecha_cirugia = cirug.fecha_cirugia;
+                    cirugia1.observaciones_cirugia = cirug.observaciones_cirugia;
+                    cirugia1.tipo_cirugia = cirug.tipo_cirugia;
+                    cirugia1.id_control_fisico = cirug.id_control_fisico;
+                    cirugia1.id_anamnesis = cirug.id_anamnesis;
+
+                    var listaAnam = await context.Anamnecis.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.ananmnecis a WHERE a.id_ananmnecis = {0}", cirug.id_anamnesis).ToListAsync();
+                    var anamnecis = new AnamnecisDtoOut();
+
+                    foreach (var item in listaAnam)
+                    {
+                        anamnecis.id_ananmnecis = item.id_ananmnecis;
+                        anamnecis.apetito = item.apetito;
+                        anamnecis.agua = item.agua;
+                        anamnecis.conducta = item.conducta;
+                        anamnecis.defecacion = item.defecacion;
+                        anamnecis.alteracionesRes = item.alteracionesRes;
+                        anamnecis.alteracionesNeuro = item.alteracionesNeuro;
+                        anamnecis.problemasUr = item.problemasUr;
+                        //listaAnamnecis.Add(anamnecis);
+                    }
+                    cirugia1.datosAnamnecis = anamnecis;
+
+                    var listaControlFisBD = await context.controlFisico.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.control_fisico a WHERE a.id_control_fisico = {0}", cirug.id_control_fisico).ToListAsync();
+
+                    var controlFis = new ControlFisicoDtoOut();
+                    foreach (var item in listaControlFisBD)
+                    {
+                        controlFis.id_control_fisico = item.id_control_fisico;
+                        controlFis.temperatura = item.temperatura;
+                        controlFis.frecCardiaca = item.frecCardiaca;
+                        controlFis.frecRespiratoria = item.frecRespiratoria;
+                        controlFis.peso = item.peso;
+
+                        //listaControlFisico.Add(controlFis);
+                    }
+                    cirugia1.datosControlFisico = controlFis;
+                    listaCirugia.Add(cirugia1);
+                }
+
+
+                var response = new ResponseDto<List<CirugiaOutDto>>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1001,
+                    MensajeRespuesta = "CORRECTO",
+                    datos = listaCirugia
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
+            }
+        }
+
+        [HttpGet("obtenerDesparasitaciones")]
+        public async Task<ActionResult<HistorialConsultaMedica>> obtenerDesparacitacionessMascota()
+        {
+            try
+            {
+
+
+                //vacunas
+                var listaDesBD = await context.Desparacitacion
+    .FromSqlRaw("select * from vetmypuppyplanet.public.desparacitaciones v").ToListAsync();
+
+                var listaDespaRs = new List<DesparacitacionOutDto>();
+
+
+                foreach (var desparacitacion in listaDesBD)
+                {
+                    var desparacitacion1 = new DesparacitacionOutDto();
+                    desparacitacion1.id_mascota = desparacitacion.id_mascota;
+                    desparacitacion1.fecha_desparacitacion = desparacitacion.fecha_desparacitacion;
+                    desparacitacion1.fecha_proxima_desparacitacion = desparacitacion.fecha_proxima_desparacitacion;
+                    desparacitacion1.principio_activo = desparacitacion.principio_activo;
+                    desparacitacion1.producto_desparacitacion = desparacitacion.producto_desparacitacion;
+                    desparacitacion1.tipo_desparacitacion = desparacitacion.tipo_desparacitacion;
+                    desparacitacion1.via_desparacitcion = desparacitacion.via_desparacitcion;
+
+                    desparacitacion1.id_control_fisico = desparacitacion.id_control_fisico;
+                    desparacitacion1.id_desparacitacion = desparacitacion.id_desparacitacion;
+
+                    var listaControlFisBD = await context.controlFisico.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.control_fisico a WHERE a.id_control_fisico = {0}", desparacitacion1.id_control_fisico).ToListAsync();
+
+                    var controlFis = new ControlFisicoDtoOut();
+                    foreach (var item in listaControlFisBD)
+                    {
+                        controlFis.id_control_fisico = item.id_control_fisico;
+                        controlFis.temperatura = item.temperatura;
+                        controlFis.frecCardiaca = item.frecCardiaca;
+                        controlFis.frecRespiratoria = item.frecRespiratoria;
+                        controlFis.peso = item.peso;
+
+                        //listaControlFisico.Add(controlFis);
+                    }
+                    desparacitacion1.datosControlFisico = controlFis;
+                    listaDespaRs.Add(desparacitacion1);
+                }
+
+
+                var response = new ResponseDto<List<DesparacitacionOutDto>>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1001,
+                    MensajeRespuesta = "CORRECTO",
+                    datos = listaDespaRs
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, e.Message);
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message);
+            }
+        }
 
     }
 }
