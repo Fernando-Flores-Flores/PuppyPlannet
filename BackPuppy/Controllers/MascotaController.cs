@@ -153,5 +153,39 @@ namespace BackPuppy.Controllers
         }
 
 
+        [HttpDelete("EliminarMascota/{mascotaId}")]
+        public async Task<ActionResult<ResponseDto<int>>> EliminarMascota(int mascotaId)
+        {
+            try
+            {
+                // Buscar la mascota por su ID en la base de datos
+                var mascotaBase = await context.Mascota.FindAsync(mascotaId);
+
+                if (mascotaBase == null)
+                {
+
+                    return NotFound("No se encontro a la mascota a eliminar"); // Puedes personalizar el mensaje de acuerdo a tus necesidades
+                }
+
+                // Eliminar la mascota de la base de datos
+                context.Mascota.Remove(mascotaBase);
+                await context.SaveChangesAsync();
+
+                var response = new ResponseDto<int>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1, // Código de respuesta para eliminación exitosa (puedes personalizarlo)
+                    MensajeRespuesta = "Mascota eliminada exitosamente",
+                    datos = mascotaId // Devuelve el ID de la mascota eliminada
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException.ToString());
+            }
+        }
+
     }
 }
