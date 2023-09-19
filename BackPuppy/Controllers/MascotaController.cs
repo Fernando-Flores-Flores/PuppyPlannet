@@ -76,8 +76,12 @@ namespace BackPuppy.Controllers
             try
             {
                 //List<mascota> mascotasFiltradas = await context.Mascota.ToListAsync();
-                List<mascota> mascotasFiltradas = await context.Mascota.Include(m => m.Dueno).Include(x=>x.Raza).ToListAsync();
-
+                //List<mascota> mascotasFiltradas = await context.Mascota.Include(m => m.Dueno).Include(x=>x.Raza).ToListAsync();
+                List<mascota> mascotasFiltradas = await context.Mascota
+                    .Where(m => m.api_estado != "ELIMINADO")
+                    .Include(m => m.Dueno)
+                    .Include(m => m.Raza)
+                    .ToListAsync();
 
                 var response = new ResponseDto<List<mascota>>()
                 {
@@ -163,12 +167,15 @@ namespace BackPuppy.Controllers
 
                 if (mascotaBase == null)
                 {
-
                     return NotFound("No se encontro a la mascota a eliminar"); // Puedes personalizar el mensaje de acuerdo a tus necesidades
                 }
 
                 // Eliminar la mascota de la base de datos
-                context.Mascota.Remove(mascotaBase);
+
+                mascotaBase.api_estado = "ELIMINADO";
+                mascotaBase.api_transaccion = "ELIMINAR";
+                context.Mascota.Update(mascotaBase);
+
                 await context.SaveChangesAsync();
 
                 var response = new ResponseDto<int>()

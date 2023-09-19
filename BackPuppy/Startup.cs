@@ -38,6 +38,15 @@ namespace BackPuppy
 
             services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<AplicationDbContext>()
                 .AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false; // Sin requerir dígitos
+                options.Password.RequireLowercase = false; // Sin requerir minúsculas
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false; // No requerir caracteres no alfanuméricos
+                options.Password.RequiredLength = 1;
+                // Otras configuraciones de contraseñas
+            });
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opciones => opciones.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = false,
