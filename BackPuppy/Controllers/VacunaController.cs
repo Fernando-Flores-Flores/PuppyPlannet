@@ -61,12 +61,12 @@ namespace BackPuppy.Controllers
         }
 
         [HttpDelete("EliminarVacuna/{mascotaId}")]
-        public async Task<ActionResult<ResponseDto<int>>> EliminarMascota([FromQuery]int mascotaId , [FromQuery] int vacunaId)
+        public async Task<ActionResult<ResponseDto<int>>> EliminarVacuna([FromQuery]int mascotaId , [FromQuery] int vacunaId)
         {
             try
             {
                 // Buscar la mascota por su ID en la base de datos
-                var mascotaBase = await context.Mascota.FindAsync(mascotaId);
+                var mascotaBase = await context.vacunas.FindAsync(mascotaId);
 
                 if (mascotaBase == null)
                 {
@@ -77,7 +77,7 @@ namespace BackPuppy.Controllers
 
                 mascotaBase.api_estado = "ELIMINADO";
                 mascotaBase.api_transaccion = "ELIMINAR";
-                context.Mascota.Update(mascotaBase);
+                context.vacunas.Update(mascotaBase);
 
                 await context.SaveChangesAsync();
 
