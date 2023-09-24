@@ -19,5 +19,7 @@ namespace BackPuppy.Dtos
 
         [Required(ErrorMessage = "El campo Id Anamnecis es requerido")]
         public int? id_anamnesis { get; set; }
+
+        public string? precio { get; set; }
     }
 }

@@ -25,5 +25,7 @@ namespace BackPuppy.Entity
         [ForeignKey("ananmnecis")]
         public int? id_anamnesis { get; set; }
         public ananmnecis ananmnecis { get; set; }
+
+        public string? precio { get; set; }
     }
 }

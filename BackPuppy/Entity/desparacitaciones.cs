@@ -23,6 +23,7 @@ namespace BackPuppy.Entity
         public int? id_control_fisico { get; set; }
         public control_fisico controlFisico { get; set; }
 
+        public string? precio { get; set; }
 
     }
 }

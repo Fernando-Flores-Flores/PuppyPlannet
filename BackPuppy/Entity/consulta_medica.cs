@@ -31,5 +31,7 @@ namespace BackPuppy.Entity
         public int? id_mascota { get; set; }
         public mascota mascota { get; set; }
 
+        public string? precio { get; set; }
+
     }
 }
