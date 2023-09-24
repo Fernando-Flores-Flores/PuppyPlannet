@@ -2180,19 +2180,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\fernando.flores\\.nuget\\packages\\": {}
+    "C:\\Users\\USER\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\UMSA\\BackPuppy\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
+      "projectUniqueName": "D:\\ProyectoJuly\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
       "projectName": "BackPuppy",
-      "projectPath": "D:\\UMSA\\BackPuppy\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
-      "packagesPath": "C:\\Users\\fernando.flores\\.nuget\\packages\\",
-      "outputPath": "D:\\UMSA\\BackPuppy\\PuppyPlannet\\BackPuppy\\obj\\",
+      "projectPath": "D:\\ProyectoJuly\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
+      "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+      "outputPath": "D:\\ProyectoJuly\\PuppyPlannet\\BackPuppy\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\fernando.flores\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -2272,7 +2272,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -278,3 +278,10 @@ C:\Users\YULISA\Documents\ProyectoVeterinaria\PuppyPlannet\BackPuppy\obj\Debug\n
 C:\Users\YULISA\Documents\ProyectoVeterinaria\PuppyPlannet\BackPuppy\obj\Debug\net6.0\BackPuppy.pdb
 C:\Users\YULISA\Documents\ProyectoVeterinaria\PuppyPlannet\BackPuppy\obj\Debug\net6.0\BackPuppy.genruntimeconfig.cache
 C:\Users\YULISA\Documents\ProyectoVeterinaria\PuppyPlannet\BackPuppy\obj\Debug\net6.0\ref\BackPuppy.dll
+D:\ProyectoJuly\PuppyPlannet\BackPuppy\bin\Debug\net6.0\BouncyCastle.Cryptography.dll
+D:\ProyectoJuly\PuppyPlannet\BackPuppy\bin\Debug\net6.0\MimeKit.dll
+D:\ProyectoJuly\PuppyPlannet\BackPuppy\bin\Debug\net6.0\System.Formats.Asn1.dll
+D:\ProyectoJuly\PuppyPlannet\BackPuppy\bin\Debug\net6.0\System.Security.Cryptography.Pkcs.dll
+D:\ProyectoJuly\PuppyPlannet\BackPuppy\bin\Debug\net6.0\System.Text.Encoding.CodePages.dll
+D:\ProyectoJuly\PuppyPlannet\BackPuppy\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll
+D:\ProyectoJuly\PuppyPlannet\BackPuppy\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Text.Encoding.CodePages.dll

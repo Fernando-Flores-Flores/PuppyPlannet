@@ -25,5 +25,8 @@ namespace BackPuppy.Dtos
 
         [Required(ErrorMessage = "El campo Id control físico es requerido")]
         public int? id_control_fisico { get; set; }
+
+
+        public string? precio { get; set; }
     }
 }

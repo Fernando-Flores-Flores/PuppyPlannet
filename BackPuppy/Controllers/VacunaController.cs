@@ -30,10 +30,11 @@ namespace BackPuppy.Controllers
                 DateTime localDateTime = DateTime.Now;
                 DateTime utcDateTime = localDateTime.ToUniversalTime();
 
-                DateTime fechaNacimiento = DateTime.Now;
-                string format = "yyyy-MM-dd";
+                //DateTime fechaNacimiento = DateTime.Now;
+                //string format = "yyyy-MM-dd";
 
                 var datosFormulario = mapper.Map<vacunas>(datos);
+
                 datosFormulario.id_mascota = datos.id_mascota;
                 datosFormulario.api_estado = "ELABORADO";
                 datosFormulario.api_transaccion = "ELABORAR";
