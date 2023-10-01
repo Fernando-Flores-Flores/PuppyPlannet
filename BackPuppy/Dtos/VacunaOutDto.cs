@@ -10,6 +10,8 @@ namespace BackPuppy.Dtos
         public string? laboratorio { get; set; }
         public string fecha_vacunacion { get; set; }
         public string fecha_revacunacion { get; set; }
+        public string? precio { get; set; }
+
         public int? id_mascota { get; set; }
         public int? id_control_fisico { get; set; }
         public ControlFisicoDtoOut datosControlFisico { get; set; }

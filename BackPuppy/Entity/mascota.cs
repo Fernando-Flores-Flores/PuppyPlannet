@@ -17,6 +17,8 @@ namespace BackPuppy.Entity
         public string sexo{ get; set; }
         public string? tatuaje { get; set; }
         public string? conducta { get; set; }
+        public string? cod_mascota { get; set; }
+
 
         public string? foto{ get; set; }
 

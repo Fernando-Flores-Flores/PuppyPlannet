@@ -384,6 +384,7 @@ namespace BackPuppy.Controllers
                     vacuna1.fecha_vacunacion = vacuna.fecha_vacunacion;
                     vacuna1.fecha_revacunacion = vacuna.fecha_revacunacion;
                     vacuna1.id_vacuna = vacuna.id_vacuna;
+                    vacuna1.precio = vacuna.precio;
                     vacuna1.id_control_fisico = vacuna.id_control_fisico;
 
                     var listaControlFisBD = await context.controlFisico.FromSqlRaw("SELECT * FROM vetmypuppyplanet.public.control_fisico a WHERE a.id_control_fisico = {0}", vacuna1.id_control_fisico).ToListAsync();
@@ -441,6 +442,7 @@ namespace BackPuppy.Controllers
                     consulta.motivo_consulta = consulta1.motivo_consulta;
                     consulta.diagnostico_consulta = consulta1.diagnostico_consulta;
                     consulta.tratamiento = consulta1.tratamiento;
+                    consulta.precio = consulta1.precio;
                     consulta.fecha_prox_visita = consulta1.fecha_prox_visita;
                     consulta.fecha_registro_consulta = consulta1.fecha_registro_consulta;
                     consulta.id_anamnesis = consulta1.id_anamnesis;
@@ -521,6 +523,7 @@ namespace BackPuppy.Controllers
                     cirugia1.fecha_cirugia = cirug.fecha_cirugia;
                     cirugia1.observaciones_cirugia = cirug.observaciones_cirugia;
                     cirugia1.tipo_cirugia = cirug.tipo_cirugia;
+                    cirugia1.precio = cirug.precio;
                     cirugia1.id_control_fisico = cirug.id_control_fisico;
                     cirugia1.id_anamnesis = cirug.id_anamnesis;
 
@@ -598,7 +601,7 @@ namespace BackPuppy.Controllers
                     desparacitacion1.producto_desparacitacion = desparacitacion.producto_desparacitacion;
                     desparacitacion1.tipo_desparacitacion = desparacitacion.tipo_desparacitacion;
                     desparacitacion1.via_desparacitcion = desparacitacion.via_desparacitcion;
-
+                    desparacitacion1.precio = desparacitacion.precio;
                     desparacitacion1.id_control_fisico = desparacitacion.id_control_fisico;
                     desparacitacion1.id_desparacitacion = desparacitacion.id_desparacitacion;
 

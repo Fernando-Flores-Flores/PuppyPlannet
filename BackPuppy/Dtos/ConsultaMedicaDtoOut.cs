@@ -11,6 +11,8 @@ namespace BackPuppy.Dtos
         public string? motivo_consulta { get; set; }
         public string? diagnostico_consulta { get; set; }
         public string? tratamiento { get; set; }
+        public string? precio { get; set; }
+
         public string? fecha_prox_visita { get; set; }
         public string? fecha_registro_consulta { get; set; }
         public int? id_anamnesis { get; set; }

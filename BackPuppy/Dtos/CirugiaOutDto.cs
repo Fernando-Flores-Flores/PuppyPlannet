@@ -8,6 +8,8 @@ namespace BackPuppy.Dtos
         public string descripcion_cirugia { get; set; }
         public string fecha_cirugia { get; set; }
         public string observaciones_cirugia { get; set; }
+        public string? precio { get; set; }
+
         public string tipo_cirugia { get; set; }
         public int? id_control_fisico { get; set; }
         public int? id_mascota { get; set; }

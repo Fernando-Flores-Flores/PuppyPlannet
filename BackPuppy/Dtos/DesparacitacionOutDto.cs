@@ -12,6 +12,8 @@ namespace BackPuppy.Dtos
         public string? producto_desparacitacion { get; set; }
         public string? tipo_desparacitacion { get; set; }
         public string? via_desparacitcion { get; set; }
+        public string? precio { get; set; }
+
         public int? id_mascota { get; set; }
         public int? id_control_fisico { get; set; } 
         public ControlFisicoDtoOut datosControlFisico { get; set; }
