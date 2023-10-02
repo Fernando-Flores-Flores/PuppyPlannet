@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BackPuppy.Dtos;
 using BackPuppy.Entity;
+using BackPuppy.Facade;
 using BackPuppy.Validaciones;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +30,9 @@ namespace BackPuppy.Controllers
         [HttpPost("RegistrarMascota")]
         public async Task<ActionResult<ResponseDto<DuenosDto>>> RegistrarMascota([FromBody] MascotaDto mascota)
         {
-            try { 
-
+            try
+            {
+                mascotaFacade mascotaFacade = new mascotaFacade();
                 DateTime localDateTime = DateTime.Now;
                 DateTime utcDateTime = localDateTime.ToUniversalTime();
 
@@ -40,7 +42,7 @@ namespace BackPuppy.Controllers
                 {
                     fechaNacimiento = DateTime.ParseExact(mascota.fecha_nacimiento, format, CultureInfo.InvariantCulture);
                     DateTime fecha = fechaNacimiento;
-                   fechaNacimiento = fecha.ToUniversalTime();
+                    fechaNacimiento = fecha.ToUniversalTime();
                 }
                 var mascotaBase = mapper.Map<mascota>(mascota);
                 mascotaBase.fecha_nacimiento = fechaNacimiento;
@@ -51,6 +53,24 @@ namespace BackPuppy.Controllers
                 mascotaBase.usuario_mod = "LocalDBA";
 
                 context.Add(mascotaBase);
+                await context.SaveChangesAsync();
+                int nuevoId = mascotaBase.idMascota;
+
+                var dueno = await context.Duenos.FirstOrDefaultAsync(m => m.IdDuenos == mascota.idDueno);
+
+                string codigoGenerado;
+
+                if (dueno != null)
+                {
+                    codigoGenerado = mascotaFacade.generarCodigoMascota(mascota, dueno.nombres, nuevoId);
+                }
+                else
+                {
+                    codigoGenerado = "SN";
+                }
+
+                mascotaBase.cod_mascota = codigoGenerado;
+                context.Update(mascotaBase); 
                 await context.SaveChangesAsync();
 
                 var response = new ResponseDto<mascota>()
