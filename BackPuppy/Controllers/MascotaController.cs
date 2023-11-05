@@ -175,8 +175,7 @@ namespace BackPuppy.Controllers
                 return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException.ToString());
             }
         }
-
-
+       
         [HttpDelete("EliminarMascota/{mascotaId}")]
         public async Task<ActionResult<ResponseDto<int>>> EliminarMascota(int mascotaId)
         {

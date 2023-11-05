@@ -128,6 +128,57 @@ namespace BackPuppy.Controllers
             }
         }
 
+        [HttpDelete("EliminarDueno/{duenoId}")]
+        public async Task<ActionResult<ResponseDto<int>>> EliminarDueno(int duenoId)
+        {
+            try
+            {
+                // Buscar la mascota por su ID en la base de datos
+                var duenoBase = await context.Duenos.FindAsync(duenoId);
+
+                if (duenoBase == null)
+                {
+                    return NotFound("No se encontro a la mascota a eliminar"); // Puedes personalizar el mensaje de acuerdo a tus necesidades
+                }
+
+                // Buscar las mascotas asociadas al dueño a eliminar
+                var mascotasAsociadas = await context.Mascota.Where(m => m.idDueno == duenoId).ToListAsync();
+
+                // Cambiar el estado de las mascotas
+                foreach (var mascota in mascotasAsociadas)
+                {
+                    mascota.api_estado = "ELIMINADO";
+                    mascota.api_transaccion = "ELIMINAR";
+                    context.Mascota.Update(mascota);
+
+                }
+
+
+                // Eliminar Dueno  de la base de datos
+
+                duenoBase.api_estado = "ELIMINADO";
+                duenoBase.api_transaccion = "ELIMINAR";
+                context.Duenos.Update(duenoBase);
+
+                await context.SaveChangesAsync();
+
+                var response = new ResponseDto<int>()
+                {
+                    statusCode = StatusCodes.Status200OK,
+                    fechaConsulta = DateTime.Now,
+                    codigoRespuesta = 1, // Código de respuesta para eliminación exitosa (puedes personalizarlo)
+                    MensajeRespuesta = "Dueno y mascotas asociadas eliminadas exitosamente",
+                    datos = duenoId // Devuelve el ID de la mascota eliminada
+                };
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return DetalleProblemaHelper.InternalServerError(HttpContext.Request, detail: e.Message, mensaje: e.InnerException.ToString());
+            }
+        }
+
+
         [HttpPut("ActualizarDueno/{idDueno}")]
         public async Task<ActionResult<ResponseDto<DuenosDto>>> ActualizarDueno(int idDueno, [FromBody] duenos duenoActualizado)
         {
