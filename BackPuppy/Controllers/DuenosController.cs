@@ -68,8 +68,11 @@ namespace BackPuppy.Controllers
         {
             try
             {
-                List<duenos> personasFiltradas = await context.Duenos.ToListAsync();
 
+                List<duenos> duenosFiltrados = await context.Duenos
+                   .Where(m => m.api_estado != "ELIMINADO")
+                   
+                   .ToListAsync();
 
                 var response = new ResponseDto<List<duenos>>()
                 {
@@ -77,7 +80,7 @@ namespace BackPuppy.Controllers
                     fechaConsulta = DateTime.Now,
                     codigoRespuesta = 1001,
                     MensajeRespuesta = "CORRECTO",
-                    datos = personasFiltradas
+                    datos = duenosFiltrados
                 };
                 return Ok(response);
             }
