@@ -102,14 +102,25 @@ namespace BackPuppy.Controllers
                     .Include(m => m.Dueno)
                     .Include(m => m.Raza)
                     .ToListAsync();
-
-                var response = new ResponseDto<List<mascota>>()
+                List<MascotasOut> listaFinal = new List<MascotasOut>();
+                for (int i = 0; i < mascotasFiltradas.Count; i++)
+                {
+                    MascotasOut resultado = new MascotasOut();
+                    mascota mascota = mascotasFiltradas[i];
+                    resultado.mascota=mascota;
+                    var existeMascota = await context.PrimeraConsulta.AnyAsync(m => m.id_mascota == mascota.idMascota);
+                    resultado.primeraConsulta = existeMascota;
+                    Console.WriteLine(resultado);
+                    listaFinal.Add(resultado);
+                }
+           
+                var response = new ResponseDto<List<MascotasOut>>()
                 {
                     statusCode = StatusCodes.Status200OK,
                     fechaConsulta = DateTime.Now,
                     codigoRespuesta = 1001,
                     MensajeRespuesta = "CORRECTO",
-                    datos = mascotasFiltradas
+                    datos = listaFinal
                 };
                 return Ok(response);
             }
