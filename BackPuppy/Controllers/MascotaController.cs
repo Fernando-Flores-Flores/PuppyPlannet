@@ -100,6 +100,7 @@ namespace BackPuppy.Controllers
                 List<mascota> mascotasFiltradas = await context.Mascota
                     .Where(m => m.api_estado != "ELIMINADO")
                     .Include(m => m.Dueno)
+                    .OrderByDescending(m => m.fecha_cre)
                     .Include(m => m.Raza)
                     .ToListAsync();
                 List<MascotasOut> listaFinal = new List<MascotasOut>();

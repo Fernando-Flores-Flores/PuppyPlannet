@@ -2180,19 +2180,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\USER\\.nuget\\packages\\": {}
+    "C:\\Users\\YULISA\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ProyectoJuly\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
+      "projectUniqueName": "C:\\Users\\YULISA\\Documents\\ProyectoVeterinaria\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
       "projectName": "BackPuppy",
-      "projectPath": "D:\\ProyectoJuly\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
-      "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
-      "outputPath": "D:\\ProyectoJuly\\PuppyPlannet\\BackPuppy\\obj\\",
+      "projectPath": "C:\\Users\\YULISA\\Documents\\ProyectoVeterinaria\\PuppyPlannet\\BackPuppy\\BackPuppy.csproj",
+      "packagesPath": "C:\\Users\\YULISA\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\YULISA\\Documents\\ProyectoVeterinaria\\PuppyPlannet\\BackPuppy\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\YULISA\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

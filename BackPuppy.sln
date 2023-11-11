@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackPuppy", "BackPuppy\BackPuppy.csproj", "{2279E07C-0A93-4873-B6D0-B2FBE24D7039}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackPuppy", "BackPuppy\BackPuppy.csproj", "{2279E07C-0A93-4873-B6D0-B2FBE24D7039}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pruebas", "Pruebas\Pruebas.csproj", "{B4255A5D-7598-4F9E-968F-FAFAFDAFB634}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{2279E07C-0A93-4873-B6D0-B2FBE24D7039}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2279E07C-0A93-4873-B6D0-B2FBE24D7039}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2279E07C-0A93-4873-B6D0-B2FBE24D7039}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4255A5D-7598-4F9E-968F-FAFAFDAFB634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4255A5D-7598-4F9E-968F-FAFAFDAFB634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4255A5D-7598-4F9E-968F-FAFAFDAFB634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4255A5D-7598-4F9E-968F-FAFAFDAFB634}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

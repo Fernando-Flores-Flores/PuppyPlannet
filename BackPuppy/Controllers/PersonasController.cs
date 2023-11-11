@@ -60,7 +60,7 @@ namespace BackPuppy.Controllers
                 }
                 else
                 {
-                    personasFiltradas = await context.Personas.Where(d => d.idCuentaIdentity == idUsuario).ToListAsync();
+                    personasFiltradas = await context.Personas.Where(d => d.idCuentaIdentity == idUsuario).OrderByDescending(p => p.fecha_cre).ToListAsync();
 
                    claims = await context.UserClaims
     .Where(c => c.UserId == idUsuario).Select(c => c.ClaimValue)
